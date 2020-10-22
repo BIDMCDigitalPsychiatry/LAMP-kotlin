@@ -12,7 +12,6 @@
 package digital.lamp.lamp-core.apis
 
 import digital.lamp.lamp-core.models.Error
-
 import digital.lamp.lamp-core.infrastructure.ApiClient
 import digital.lamp.lamp-core.infrastructure.ClientException
 import digital.lamp.lamp-core.infrastructure.ClientError
