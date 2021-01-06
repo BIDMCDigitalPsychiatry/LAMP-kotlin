@@ -1,0 +1,3 @@
+include ':lamp-core'
+include ':sensor-core'
+include ':app'
