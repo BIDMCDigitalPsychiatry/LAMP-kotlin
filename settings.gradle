@@ -1,1 +1,3 @@
-rootProject.name = 'LAMP'
+include ':lamp_kotlin'
+include ':app'
+rootProject.name = "Lamp-Kotlin-Test"
