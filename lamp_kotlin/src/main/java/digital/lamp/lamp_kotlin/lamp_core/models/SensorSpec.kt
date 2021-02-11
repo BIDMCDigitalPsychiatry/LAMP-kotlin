@@ -25,18 +25,13 @@ import java.io.Serializable
  * @param settingsSchema The data definition of a SensorSpec.
  */
 @Parcelize
-
 data class SensorSpec (
     /* The name of the sensor. */
-    @Json(name = "name")
-    var name: kotlin.String? = null,
-    /* The data definition of a SensorSpec. */
-    @Json(name = "settings_schema")
-    var settingsSchema: @RawValue kotlin.Any? = null
+    @Json(name = "data")
+    var data: List<Sensor>,
 ) : Serializable, Parcelable {
 	companion object {
 		private const val serialVersionUID: Long = 123
 	}
-
 }
 

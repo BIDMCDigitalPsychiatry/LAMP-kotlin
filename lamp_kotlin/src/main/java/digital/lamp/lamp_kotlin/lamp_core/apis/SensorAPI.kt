@@ -33,28 +33,29 @@ class SensorAPI(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath)
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun sensorAll(transform: kotlin.String?) : kotlin.Array<kotlin.Any> {
+    fun sensorAll(participantId: String,basic: String) : Any {
         val localVariableBody: kotlin.Any? = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, List<kotlin.String>>()
-            .apply {
-                if (transform != null) {
-                    put("transform", listOf(transform.toString()))
-                }
-            }
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+
+        localVariableHeaders.apply {
+            put("Authorization",basic)
+        }
+
         val localVariableConfig = RequestConfig(
             RequestMethod.GET,
-            "/sensor",
+            "/participant/{participant_id}/sensor".replace("{" + "participant_id" + "}", "$participantId"),
             query = localVariableQuery,
             headers = localVariableHeaders
         )
+
         val localVarResponse = request<kotlin.Array<kotlin.Any>>(
             localVariableConfig,
             localVariableBody
         )
 
         return when (localVarResponse.responseType) {
-            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.Array<kotlin.Any>
+            ResponseType.Success -> (localVarResponse as Success<*>).data as Any
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {
