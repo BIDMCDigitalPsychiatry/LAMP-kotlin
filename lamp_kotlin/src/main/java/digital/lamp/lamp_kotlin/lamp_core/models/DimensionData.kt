@@ -26,6 +26,7 @@ data class DimensionData(
         val bp_diastolic: Float?,
         val unit: String?,
         val value: Any?,
+        val type: Any?,
         val activity: ActivityData?
 )
 

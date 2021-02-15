@@ -53,7 +53,6 @@ class SensorAPI(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath)
             localVariableConfig,
             localVariableBody
         )
-
         return when (localVarResponse.responseType) {
             ResponseType.Success -> (localVarResponse as Success<*>).data as Any
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
