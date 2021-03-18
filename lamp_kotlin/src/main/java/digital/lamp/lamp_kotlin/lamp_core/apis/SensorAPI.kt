@@ -44,7 +44,7 @@ class SensorAPI(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath)
 
         val localVariableConfig = RequestConfig(
             RequestMethod.GET,
-            "/participant/{participant_id}/sensor".replace("{" + "participant_id" + "}", "$participantId"),
+            "/participant/{participant_id}/sensor".replace("{" + "participant_id" + "}", participantId),
             query = localVariableQuery,
             headers = localVariableHeaders
         )

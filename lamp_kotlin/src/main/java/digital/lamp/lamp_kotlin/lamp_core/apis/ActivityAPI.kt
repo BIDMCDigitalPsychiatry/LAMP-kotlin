@@ -19,9 +19,7 @@ import digital.lamp.lamp_kotlin.lamp_core.infrastructure.ApiClient
 class ActivityAPI(basePath: kotlin.String = defaultBasePath) : ApiClient(basePath) {
     companion object {
         @JvmStatic
-        val defaultBasePath: String by lazy {
-            System.getProperties().getProperty("digital.lamp.lamp-core.baseUrl", "https://api.lamp.digital")
-        }
+        val defaultBasePath: String = ""
     }
 
     /**
@@ -35,20 +33,22 @@ class ActivityAPI(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun activityAll(transform: kotlin.String?) : kotlin.Array<kotlin.Any> {
+    fun activityAll(participantId: String,basic: String) : Any {
         val localVariableBody: kotlin.Any? = null
         val localVariableQuery: MultiValueMap = mutableMapOf<kotlin.String, List<kotlin.String>>()
             .apply {
-                if (transform != null) {
-                    put("transform", listOf(transform.toString()))
-                }
+                    put("ignore_binary", listOf("true"))
             }
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
+
+        localVariableHeaders.apply {
+            put("Authorization",basic)
+        }
         val localVariableConfig = RequestConfig(
-            RequestMethod.GET,
-            "/activity",
-            query = localVariableQuery,
-            headers = localVariableHeaders
+                RequestMethod.GET,
+                "/participant/{participant_id}/activity".replace("{" + "participant_id" + "}", participantId),
+                query = localVariableQuery,
+                headers = localVariableHeaders
         )
         val localVarResponse = request<kotlin.Array<kotlin.Any>>(
             localVariableConfig,
@@ -56,7 +56,7 @@ class ActivityAPI(basePath: kotlin.String = defaultBasePath) : ApiClient(basePat
         )
 
         return when (localVarResponse.responseType) {
-            ResponseType.Success -> (localVarResponse as Success<*>).data as kotlin.Array<kotlin.Any>
+            ResponseType.Success -> (localVarResponse as Success<*>).data as Any
             ResponseType.Informational -> throw UnsupportedOperationException("Client does not support Informational responses.")
             ResponseType.Redirection -> throw UnsupportedOperationException("Client does not support Redirection responses.")
             ResponseType.ClientError -> {

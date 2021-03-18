@@ -13,7 +13,6 @@ package digital.lamp.lamp_kotlin.lamp_core.models
 
 import com.squareup.moshi.Json
 import android.os.Parcelable
-import digital.lamp.lamp_core.models.DurationIntervalLegacy
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.parcel.RawValue
 
@@ -39,14 +38,13 @@ data class Activity (
     @Json(name = "name")
     var name: kotlin.String? = null,
     @Json(name = "schedule")
-    var schedule: DurationIntervalLegacy? = null,
+    var schedule: ArrayList<DurationIntervalLegacy>? = null,
     /* The configuration settings for the activity. */
     @Json(name = "settings")
     var settings: @RawValue kotlin.Any? = null
-) : Serializable, Parcelable {
+) : Parcelable {
 	companion object {
 		private const val serialVersionUID: Long = 123
 	}
-
 }
 
