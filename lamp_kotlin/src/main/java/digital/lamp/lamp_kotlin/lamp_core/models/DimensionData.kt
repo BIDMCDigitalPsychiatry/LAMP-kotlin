@@ -84,5 +84,5 @@ data class ActivityData(
 data class ScreenStateData(
     val value: Int,
     val representation: String?,
-    val battery_level: String
+    val battery_level: Int?
 )
