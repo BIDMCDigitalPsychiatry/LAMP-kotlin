@@ -17,7 +17,7 @@ data class DimensionData(
         val latitude: Double?,
         val altitude: Double?,
         val accuracy: Float?,
-        val state: ScreenStateData?,
+        val state: ScreenStateInfo?,
         val bssid: String?,
         val ssid: String?,
         val rssi: Int?,
@@ -81,7 +81,7 @@ data class ActivityData(
     constructor() : this(null,null,null,null,null,null,null)
 }
 
-data class ScreenStateData(
+data class ScreenStateInfo(
     val value: Int,
     val representation: String?,
     val battery_level: Int?
