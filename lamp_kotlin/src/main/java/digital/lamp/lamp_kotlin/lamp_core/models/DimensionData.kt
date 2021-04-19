@@ -28,7 +28,8 @@ data class DimensionData(
         val unit: String?,
         val value: Any?,
         val type: Any?,
-        val activity: ActivityData?
+        val activity: ActivityData?,
+        val source:String?
 )
 
 data class RotationData(
