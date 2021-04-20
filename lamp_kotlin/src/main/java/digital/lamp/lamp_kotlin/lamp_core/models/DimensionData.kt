@@ -17,17 +17,19 @@ data class DimensionData(
         val latitude: Double?,
         val altitude: Double?,
         val accuracy: Float?,
-        val state: ScreenStateInfo?,
+        val representation: String?,
+        val battery_level: Int?,
         val bssid: String?,
         val ssid: String?,
         val rssi: Int?,
         val steps: Int?,
-        val bp_systolic: Float?,
-        val bp_diastolic: Float?,
+        val systolic: BloodPressureData?,
+        val diastolic: BloodPressureData?,
         val unit: String?,
         val value: Any?,
         val type: Any?,
-        val activity: ActivityData?
+        val activity: ActivityData?,
+        val source:String?
 )
 
 data class RotationData(
@@ -81,8 +83,8 @@ data class ActivityData(
     constructor() : this(null,null,null,null,null,null,null)
 }
 
-data class ScreenStateInfo(
-    val value: Int,
-    val representation: String,
-    val battery_level: Int?
+data class BloodPressureData(
+        val value: Float,
+        val units: String?,
+        val source: String?
 )
