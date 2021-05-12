@@ -32,7 +32,7 @@ data class DurationIntervalLegacy (
     @Json(name = "start_date")
     var start_date: java.sql.Timestamp? = null,
     @Json(name = "time")
-    var time: java.sql.Timestamp? = null,
+    var time: @RawValue Any? = null,
     @Json(name = "customTimes")
     var custom_time: @RawValue ArrayList<Any>? = null,
     @Json(name = "notificationIds")
