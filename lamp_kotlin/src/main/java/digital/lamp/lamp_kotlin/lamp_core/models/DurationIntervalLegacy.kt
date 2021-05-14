@@ -30,7 +30,7 @@ data class DurationIntervalLegacy (
     @Json(name = "repeat_interval")
     var repeat_interval: kotlin.String? = null,
     @Json(name = "start_date")
-    var start_date: java.sql.Timestamp? = null,
+    var start_date: @RawValue Any? = null,
     @Json(name = "time")
     var time: @RawValue Any? = null,
     @Json(name = "customTimes")
