@@ -40,11 +40,25 @@ data class Sensor (
     var name: kotlin.String? = null,
     /* The configuration settings for the sensor. */
     @Json(name = "settings")
-    var settings: @RawValue kotlin.Any? = null
+    var settings: @RawValue Settings? = null
 ) : Serializable, Parcelable {
 	companion object {
 		private const val serialVersionUID: Long = 123
 	}
 
 }
+@Parcelize
+data class Settings(
+    /* Is cellular upload allowed for the sensor*/
+    @Json(name = "cellular_upload")
+    val cellular_upload: Boolean?,
+    /* Frequncy of sensor*/
+    @Json(name = "frequency")
+    val frequency: Int?
+): Serializable, Parcelable {
+    companion object {
+        private const val serialVersionUID: Long = 123
+    }
+}
+
 
