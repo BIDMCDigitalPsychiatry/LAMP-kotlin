@@ -114,14 +114,14 @@ class Accelerometer: Service(), SensorEventListener {
 
         lateinit var callback : (ContentValues) -> Unit
 
-        private var interval :Int = LampConstants.INTERVAL
+        private var interval :Long = LampConstants.INTERVAL
         @JvmStatic
         fun setSensorObserver(listener: (ContentValues) -> Unit) {
             callback = listener
         }
 
         @JvmStatic
-        fun setFrequency(interval:Int) {
+        fun setFrequency(interval:Long) {
             this.interval = interval
         }
     }
