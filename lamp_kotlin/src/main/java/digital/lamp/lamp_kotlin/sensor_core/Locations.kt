@@ -8,7 +8,8 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import com.google.android.gms.location.*
-import digital.lamp.lamp_kotlin.sensor_core.utils.LampConstants
+import com.google.android.gms.tasks.OnSuccessListener
+import java.util.*
 
 /**
  * Location service for Aware framework
@@ -17,7 +18,7 @@ import digital.lamp.lamp_kotlin.sensor_core.utils.LampConstants
  * @author denzil
  */
 @SuppressLint("MissingPermission")
-class Locations : Service() {
+class Locations : Service(), OnSuccessListener<Location> {
 
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -46,18 +47,20 @@ class Locations : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
+        interval?.let { setLocationTimer() }
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 for (location in locationResult.locations) {
                     // Update UI with location data
                     // ...
-                        if(interval!=null){
-                            val currentTimeStamp = System.currentTimeMillis()
-                            if (currentTimeStamp - LAST_TS < interval!!) return
-                            callback(location)
-                        }else {
-                            callback(location)
-                        }
+                    if (interval != null) {
+                        val currentTimeStamp = System.currentTimeMillis()
+                        if (currentTimeStamp - LAST_TS < interval!!) return
+                        callback(location)
+                        LAST_TS = currentTimeStamp
+                    } else {
+                        callback(location)
+                    }
                 }
             }
         }
@@ -69,14 +72,23 @@ class Locations : Service() {
         return START_STICKY
     }
 
+    private fun setLocationTimer() {
+        val timer = Timer()
+        timer.schedule(object : TimerTask() {
+            override fun run() {
+                fusedLocationClient?.lastLocation?.addOnSuccessListener(this@Locations)
+            }
+        }, 0, interval!!)
+    }
+
     companion object {
         private const val TAG = "LAMP::Location"
         private var fusedLocationClient: FusedLocationProviderClient? = null
         private var locationCallback: LocationCallback? = null
         private var locationRequest: LocationRequest? = null
 
-        lateinit var callback : (Location) -> Unit
-        private var interval :Long? =null
+        lateinit var callback: (Location) -> Unit
+        private var interval: Long? = null
         private var LAST_TS: Long = 0
 
         @JvmStatic
@@ -85,8 +97,18 @@ class Locations : Service() {
         }
 
         @JvmStatic
-        fun setInterval(interval:Long) {
+        fun setInterval(interval: Long) {
             this.interval = interval
         }
+    }
+
+    override fun onSuccess(location: Location?) {
+        val currentTimeStamp = System.currentTimeMillis()
+        if (currentTimeStamp - LAST_TS < interval!!) return
+        location?.let {
+            callback(it)
+            LAST_TS = currentTimeStamp
+        }
+
     }
 }
