@@ -121,7 +121,7 @@ class Accelerometer: Service(), SensorEventListener {
         }
 
         @JvmStatic
-        fun setFrequency(interval:Long) {
+        fun setInterval(interval:Long) {
             this.interval = interval
         }
     }

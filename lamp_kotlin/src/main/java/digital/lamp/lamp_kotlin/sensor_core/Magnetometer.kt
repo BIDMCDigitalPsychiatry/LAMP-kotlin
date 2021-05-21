@@ -27,7 +27,7 @@ class Magnetometer : Service(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent) {
         val currentTimeStamp = System.currentTimeMillis()
-        if (currentTimeStamp - LAST_TS < LampConstants.INTERVAL) return
+        if (currentTimeStamp - LAST_TS < interval) return
 
         LAST_VALUES = arrayOf(event.values[0], event.values[1], event.values[2])
         val rowData = ContentValues()
@@ -105,11 +105,16 @@ class Magnetometer : Service(), SensorEventListener {
         private var LAST_TS: Long = 0
         private var FREQUENCY = -1
         private var THRESHOLD = 0.0
-
+        private var interval :Long = LampConstants.INTERVAL
         lateinit var callback : (ContentValues) -> Unit
         @JvmStatic
         fun setSensorObserver(listener: (ContentValues) -> Unit) {
             callback = listener
+        }
+
+        @JvmStatic
+        fun setInterval(interval:Long) {
+            this.interval = interval
         }
     }
 }

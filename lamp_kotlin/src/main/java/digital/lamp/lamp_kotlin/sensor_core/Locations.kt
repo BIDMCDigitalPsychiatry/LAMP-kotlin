@@ -8,6 +8,7 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import com.google.android.gms.location.*
+import digital.lamp.lamp_kotlin.sensor_core.utils.LampConstants
 
 /**
  * Location service for Aware framework
@@ -50,7 +51,13 @@ class Locations : Service() {
                 for (location in locationResult.locations) {
                     // Update UI with location data
                     // ...
-                    callback(location)
+                        if(interval!=null){
+                            val currentTimeStamp = System.currentTimeMillis()
+                            if (currentTimeStamp - LAST_TS < interval!!) return
+                            callback(location)
+                        }else {
+                            callback(location)
+                        }
                 }
             }
         }
@@ -69,9 +76,17 @@ class Locations : Service() {
         private var locationRequest: LocationRequest? = null
 
         lateinit var callback : (Location) -> Unit
+        private var interval :Long? =null
+        private var LAST_TS: Long = 0
+
         @JvmStatic
         fun setSensorObserver(listener: (Location) -> Unit) {
             callback = listener
+        }
+
+        @JvmStatic
+        fun setInterval(interval:Long) {
+            this.interval = interval
         }
     }
 }
