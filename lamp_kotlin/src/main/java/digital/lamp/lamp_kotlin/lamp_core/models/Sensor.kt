@@ -51,10 +51,10 @@ data class Sensor (
 data class Settings(
     /* Is cellular upload allowed for the sensor*/
     @Json(name = "cellular_upload")
-    val cellular_upload: Boolean?,
+    val cellular_upload: Boolean? =true,
     /* Frequncy of sensor*/
     @Json(name = "frequency")
-    val frequency: Int?
+    val frequency: Double?
 ): Serializable, Parcelable {
     companion object {
         private const val serialVersionUID: Long = 123
