@@ -8,6 +8,8 @@ import android.os.IBinder
 import android.os.Looper
 import android.util.Log
 import com.google.android.gms.location.*
+import com.google.android.gms.tasks.OnSuccessListener
+import java.util.*
 
 /**
  * Location service for Aware framework
@@ -16,7 +18,7 @@ import com.google.android.gms.location.*
  * @author denzil
  */
 @SuppressLint("MissingPermission")
-class Locations : Service() {
+class Locations : Service(), OnSuccessListener<Location> {
 
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -45,12 +47,20 @@ class Locations : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
+        interval?.let { setLocationTimer() }
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
                 for (location in locationResult.locations) {
                     // Update UI with location data
                     // ...
-                    callback(location)
+                    if (interval != null) {
+                        val currentTimeStamp = System.currentTimeMillis()
+                        if (currentTimeStamp - LAST_TS < interval!!) return
+                        callback(location)
+                        LAST_TS = currentTimeStamp
+                    } else {
+                        callback(location)
+                    }
                 }
             }
         }
@@ -62,16 +72,43 @@ class Locations : Service() {
         return START_STICKY
     }
 
+    private fun setLocationTimer() {
+        val timer = Timer()
+        timer.schedule(object : TimerTask() {
+            override fun run() {
+                fusedLocationClient?.lastLocation?.addOnSuccessListener(this@Locations)
+            }
+        }, 0, interval!!)
+    }
+
     companion object {
         private const val TAG = "LAMP::Location"
         private var fusedLocationClient: FusedLocationProviderClient? = null
         private var locationCallback: LocationCallback? = null
         private var locationRequest: LocationRequest? = null
 
-        lateinit var callback : (Location) -> Unit
+        lateinit var callback: (Location) -> Unit
+        private var interval: Long? = null
+        private var LAST_TS: Long = 0
+
         @JvmStatic
         fun setSensorObserver(listener: (Location) -> Unit) {
             callback = listener
         }
+
+        @JvmStatic
+        fun setInterval(interval: Long) {
+            this.interval = interval
+        }
+    }
+
+    override fun onSuccess(location: Location?) {
+        val currentTimeStamp = System.currentTimeMillis()
+        if (currentTimeStamp - LAST_TS < interval!!) return
+        location?.let {
+            callback(it)
+            LAST_TS = currentTimeStamp
+        }
+
     }
 }
