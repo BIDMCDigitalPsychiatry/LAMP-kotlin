@@ -26,6 +26,6 @@ internal object LampConstants {
 
     const val FREQUENCY_WIFI : Int = 5
 
-    const val INTERVAL : Long = 3000
+    const val INTERVAL : Long = 330//1000
 
 }
