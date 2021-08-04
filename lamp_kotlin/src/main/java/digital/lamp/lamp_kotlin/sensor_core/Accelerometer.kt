@@ -21,8 +21,14 @@ import digital.lamp.lamp_kotlin.sensor_core.utils.LampConstants
  *
  * @author df
  */
-class Accelerometer: Service(), SensorEventListener {
+class Accelerometer : Service(), SensorEventListener {
 
+    private var isDataCollectionPaused = false
+    private var collectionIntervalStartTime: Long? = null
+    private var pauseIntervalStartTime: Long? = null
+
+    private var pauseInterval: Long? = null
+    private var collectionInterval: Long? = null
 
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
@@ -30,20 +36,43 @@ class Accelerometer: Service(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent) {
-        val currentTimeStamp = System.currentTimeMillis()
-        if (currentTimeStamp - LAST_TS < interval) return
+        if (pauseInterval != null && collectionInterval != null) {
+            if (!isDataCollectionPaused) {
+                if (collectionIntervalStartTime == null) {
+                    collectionIntervalStartTime = System.currentTimeMillis()
+                    val currentTimeStamp = System.currentTimeMillis()
+                    if (currentTimeStamp - collectionIntervalStartTime!! < collectionInterval!!) {
+                        val rowData = ContentValues()
+                        rowData.put(TIMESTAMP, currentTimeStamp)
+                        rowData.put(VALUES_0, event.values[0])
+                        rowData.put(VALUES_1, event.values[1])
+                        rowData.put(VALUES_2, event.values[2])
+                        rowData.put(ACCURACY, event.accuracy)
 
-        val rowData = ContentValues()
-        rowData.put(TIMESTAMP, currentTimeStamp)
-        rowData.put(VALUES_0, event.values[0])
-        rowData.put(VALUES_1, event.values[1])
-        rowData.put(VALUES_2, event.values[2])
-        rowData.put(ACCURACY, event.accuracy)
+                        callback(rowData)
+                    } else {
+                        isDataCollectionPaused = true
+                        collectionIntervalStartTime = null
+                        pauseIntervalStartTime = currentTimeStamp
+                    }
+                }
+            }
+        } else {
+            val currentTimeStamp = System.currentTimeMillis()
+            if (currentTimeStamp - LAST_TS < interval) return
 
-        callback(rowData)
-        LAST_TS = currentTimeStamp
+            val rowData = ContentValues()
+            rowData.put(TIMESTAMP, currentTimeStamp)
+            rowData.put(VALUES_0, event.values[0])
+            rowData.put(VALUES_1, event.values[1])
+            rowData.put(VALUES_2, event.values[2])
+            rowData.put(ACCURACY, event.accuracy)
 
-        Log.e(TAG, rowData.toString())
+            callback(rowData)
+            LAST_TS = currentTimeStamp
+
+            Log.e(TAG, rowData.toString())
+        }
     }
 
     override fun onCreate() {
@@ -77,7 +106,8 @@ class Accelerometer: Service(), SensorEventListener {
             val newFrequency = LampConstants.FREQUENCY_ACCELEROMETER
             val newThreshold = LampConstants.THRESHOLD_ACCELEROMETER
             if (FREQUENCY != newFrequency
-                    || THRESHOLD != newThreshold) {
+                || THRESHOLD != newThreshold
+            ) {
                 sensorHandler!!.removeCallbacksAndMessages(null)
                 mSensorManager!!.unregisterListener(this, mAccelerometer)
                 FREQUENCY = newFrequency
@@ -112,17 +142,24 @@ class Accelerometer: Service(), SensorEventListener {
         private var FREQUENCY = -1
         private var THRESHOLD = 0.0
 
-        lateinit var callback : (ContentValues) -> Unit
+        lateinit var callback: (ContentValues) -> Unit
 
-        private var interval :Long = LampConstants.INTERVAL
+        private var interval: Long = LampConstants.INTERVAL
+        private var pauseInterval: Long? = null
+
         @JvmStatic
         fun setSensorObserver(listener: (ContentValues) -> Unit) {
             callback = listener
         }
 
         @JvmStatic
-        fun setInterval(interval:Long) {
+        fun setInterval(interval: Long) {
             this.interval = interval
+        }
+
+        @JvmStatic
+        fun setPauseInterval(pauseInterval: Long) {
+            this.pauseInterval = interval
         }
     }
 }
