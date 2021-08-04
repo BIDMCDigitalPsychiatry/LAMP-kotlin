@@ -27,8 +27,7 @@ class Accelerometer : Service(), SensorEventListener {
     private var collectionIntervalStartTime: Long? = null
     private var pauseIntervalStartTime: Long? = null
 
-    private var pauseInterval: Long? = null
-    private var collectionInterval: Long? = null
+
 
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
@@ -146,6 +145,7 @@ class Accelerometer : Service(), SensorEventListener {
 
         private var interval: Long = LampConstants.INTERVAL
         private var pauseInterval: Long? = null
+        private var collectionInterval: Long? = null
 
         @JvmStatic
         fun setSensorObserver(listener: (ContentValues) -> Unit) {
@@ -158,8 +158,9 @@ class Accelerometer : Service(), SensorEventListener {
         }
 
         @JvmStatic
-        fun setPauseInterval(pauseInterval: Long) {
+        fun setPauseAndCollectionIntervals(pauseInterval: Long, collectionInterval: Long) {
             this.pauseInterval = interval
+            this.collectionInterval = collectionInterval
         }
     }
 }
