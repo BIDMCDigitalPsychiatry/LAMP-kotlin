@@ -36,9 +36,12 @@ class Accelerometer : Service(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent) {
         if (pauseInterval != null && collectionInterval != null) {
+            Log.e("Accelerometer"," pauseInterval $pauseInterval collectionInterval $collectionInterval 1")
             if (!isDataCollectionPaused) {
+                Log.e("Accelerometer"," isDataCollectionPaused $isDataCollectionPaused ")
                 if (collectionIntervalStartTime == null) {
                     collectionIntervalStartTime = System.currentTimeMillis()
+                }
                     val currentTimeStamp = System.currentTimeMillis()
                     if (currentTimeStamp - collectionIntervalStartTime!! < collectionInterval!!) {
                         val rowData = ContentValues()
@@ -54,7 +57,7 @@ class Accelerometer : Service(), SensorEventListener {
                         collectionIntervalStartTime = null
                         pauseIntervalStartTime = currentTimeStamp
                     }
-                }
+
             }
         } else {
             val currentTimeStamp = System.currentTimeMillis()
