@@ -162,7 +162,7 @@ class Accelerometer : Service(), SensorEventListener {
 
         @JvmStatic
         fun setPauseAndCollectionIntervals(pauseInterval: Long, collectionInterval: Long) {
-            this.pauseInterval = interval
+            this.pauseInterval = pauseInterval
             this.collectionInterval = collectionInterval
         }
     }
