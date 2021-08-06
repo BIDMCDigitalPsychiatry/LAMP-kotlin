@@ -47,6 +47,8 @@ class Locations : Service(), OnSuccessListener<Location> {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
+        if(interval ==null && defaultInterval!=null)
+            interval = defaultInterval
         interval?.let { setLocationTimer() }
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -90,6 +92,7 @@ class Locations : Service(), OnSuccessListener<Location> {
         lateinit var callback: (Location) -> Unit
         private var interval: Long? = null
         private var LAST_TS: Long = 0
+        private var defaultInterval: Long? = null
 
         @JvmStatic
         fun setSensorObserver(listener: (Location) -> Unit) {
@@ -99,6 +102,11 @@ class Locations : Service(), OnSuccessListener<Location> {
         @JvmStatic
         fun setInterval(interval: Long) {
             this.interval = interval
+        }
+
+        @JvmStatic
+        fun setDefaultInterval(interval: Long) {
+            this.defaultInterval = interval
         }
     }
 
