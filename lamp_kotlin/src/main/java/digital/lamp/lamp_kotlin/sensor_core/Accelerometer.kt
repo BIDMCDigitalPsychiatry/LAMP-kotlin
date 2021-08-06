@@ -63,6 +63,7 @@ class Accelerometer : Service(), SensorEventListener {
                         isDataCollectionPaused = true
                         collectionIntervalStartTime = null
                         pauseIntervalStartTime = currentTimeStamp
+                        LAST_TS =0
                     }
 
             }
