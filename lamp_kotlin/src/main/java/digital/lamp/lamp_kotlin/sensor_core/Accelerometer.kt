@@ -45,6 +45,7 @@ class Accelerometer : Service(), SensorEventListener {
                     Log.e("Accelerometer"," collectionIntervalStartTime $collectionIntervalStartTime")
                 }
                     val currentTimeStamp = System.currentTimeMillis()
+                if (currentTimeStamp - LAST_TS < interval) return
                     if (currentTimeStamp - collectionIntervalStartTime!! < collectionInterval!!) {
                         Log.e("Accelerometer"," 2")
                         val rowData = ContentValues()
@@ -55,6 +56,7 @@ class Accelerometer : Service(), SensorEventListener {
                         rowData.put(ACCURACY, event.accuracy)
 
                         callback(rowData)
+                        LAST_TS = currentTimeStamp
                         Log.e("Accelerometer"," 3")
                     } else {
                         Log.e("Accelerometer"," 4")
