@@ -68,8 +68,11 @@ class Accelerometer : Service(), SensorEventListener {
 
             }else {
                 val currentTimeStamp = System.currentTimeMillis()
+                Log.e("Accelerometer"," 5 ")
                 pauseIntervalStartTime?.let {
+                    Log.e("Accelerometer"," 5 pauseIntervalStartTime $pauseIntervalStartTime")
                     if (currentTimeStamp - it >= pauseInterval!!) {
+                        Log.e("Accelerometer", " 5 currentTimeStamp - it ${currentTimeStamp - it} pauseInterval: $pauseInterval")
                         isDataCollectionPaused = false
                         pauseIntervalStartTime =null
                     }
