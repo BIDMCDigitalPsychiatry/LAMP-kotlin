@@ -66,6 +66,14 @@ class Accelerometer : Service(), SensorEventListener {
                         LAST_TS =0
                     }
 
+            }else {
+                val currentTimeStamp = System.currentTimeMillis()
+                pauseIntervalStartTime?.let {
+                    if (currentTimeStamp - it >= pauseInterval!!) {
+                        isDataCollectionPaused = false
+                        pauseIntervalStartTime =null
+                    }
+                }
             }
         } else {
             val currentTimeStamp = System.currentTimeMillis()
