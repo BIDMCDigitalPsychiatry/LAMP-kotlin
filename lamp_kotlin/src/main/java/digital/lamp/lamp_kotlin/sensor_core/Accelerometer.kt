@@ -36,18 +36,13 @@ class Accelerometer : Service(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent) {
         if (pauseInterval != null && collectionInterval != null) {
-            Log.e("Accelerometer"," pauseInterval $pauseInterval collectionInterval $collectionInterval 1")
             if (!isDataCollectionPaused) {
-                Log.e("Accelerometer"," isDataCollectionPaused $isDataCollectionPaused ")
                 if (collectionIntervalStartTime == null) {
-                    Log.e("Accelerometer"," collectionIntervalStartTime")
                     collectionIntervalStartTime = System.currentTimeMillis()
-                    Log.e("Accelerometer"," collectionIntervalStartTime $collectionIntervalStartTime")
                 }
                     val currentTimeStamp = System.currentTimeMillis()
                 if (currentTimeStamp - LAST_TS < interval) return
                     if (currentTimeStamp - collectionIntervalStartTime!! < collectionInterval!!) {
-                        Log.e("Accelerometer"," 2")
                         val rowData = ContentValues()
                         rowData.put(TIMESTAMP, currentTimeStamp)
                         rowData.put(VALUES_0, event.values[0])
@@ -57,9 +52,7 @@ class Accelerometer : Service(), SensorEventListener {
 
                         callback(rowData)
                         LAST_TS = currentTimeStamp
-                        Log.e("Accelerometer"," 3")
                     } else {
-                        Log.e("Accelerometer"," 4")
                         isDataCollectionPaused = true
                         collectionIntervalStartTime = null
                         pauseIntervalStartTime = currentTimeStamp
@@ -68,11 +61,8 @@ class Accelerometer : Service(), SensorEventListener {
 
             }else {
                 val currentTimeStamp = System.currentTimeMillis()
-                Log.e("Accelerometer"," 5 ")
                 pauseIntervalStartTime?.let {
-                    Log.e("Accelerometer"," 5 pauseIntervalStartTime $pauseIntervalStartTime")
                     if (currentTimeStamp - it >= pauseInterval!!) {
-                        Log.e("Accelerometer", " 5 currentTimeStamp - it ${currentTimeStamp - it} pauseInterval: $pauseInterval")
                         isDataCollectionPaused = false
                         pauseIntervalStartTime =null
                     }
