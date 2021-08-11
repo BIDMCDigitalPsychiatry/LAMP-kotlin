@@ -36,17 +36,13 @@ class Accelerometer : Service(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent) {
         if (pauseInterval != null && collectionInterval != null) {
-            Log.e("Accelerometer"," pauseInterval $pauseInterval collectionInterval $collectionInterval 1")
             if (!isDataCollectionPaused) {
-                Log.e("Accelerometer"," isDataCollectionPaused $isDataCollectionPaused ")
                 if (collectionIntervalStartTime == null) {
-                    Log.e("Accelerometer"," collectionIntervalStartTime")
                     collectionIntervalStartTime = System.currentTimeMillis()
-                    Log.e("Accelerometer"," collectionIntervalStartTime $collectionIntervalStartTime")
                 }
                     val currentTimeStamp = System.currentTimeMillis()
+                if (currentTimeStamp - LAST_TS < interval) return
                     if (currentTimeStamp - collectionIntervalStartTime!! < collectionInterval!!) {
-                        Log.e("Accelerometer"," 2")
                         val rowData = ContentValues()
                         rowData.put(TIMESTAMP, currentTimeStamp)
                         rowData.put(VALUES_0, event.values[0])
@@ -55,14 +51,22 @@ class Accelerometer : Service(), SensorEventListener {
                         rowData.put(ACCURACY, event.accuracy)
 
                         callback(rowData)
-                        Log.e("Accelerometer"," 3")
+                        LAST_TS = currentTimeStamp
                     } else {
-                        Log.e("Accelerometer"," 4")
                         isDataCollectionPaused = true
                         collectionIntervalStartTime = null
                         pauseIntervalStartTime = currentTimeStamp
+                        LAST_TS =0
                     }
 
+            }else {
+                val currentTimeStamp = System.currentTimeMillis()
+                pauseIntervalStartTime?.let {
+                    if (currentTimeStamp - it >= pauseInterval!!) {
+                        isDataCollectionPaused = false
+                        pauseIntervalStartTime =null
+                    }
+                }
             }
         } else {
             val currentTimeStamp = System.currentTimeMillis()
