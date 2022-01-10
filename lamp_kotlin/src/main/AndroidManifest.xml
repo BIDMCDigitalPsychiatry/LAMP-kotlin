@@ -60,5 +60,9 @@
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.LinearAccelerometer"
             android:exported="true" />
+
+        <service
+            android:name="digital.lamp.lamp_kotlin.sensor_core.Gravity"
+            android:exported="true" />
     </application>
 </manifest>

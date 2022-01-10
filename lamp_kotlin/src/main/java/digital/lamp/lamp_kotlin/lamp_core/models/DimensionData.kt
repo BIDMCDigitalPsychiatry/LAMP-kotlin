@@ -89,3 +89,9 @@ data class BloodPressureData(
         val units: String?,
         val source: String?
 )
+
+data class AttitudeData(
+    val x: Double?,
+    val y: Double?,
+    val z: Double?
+)
