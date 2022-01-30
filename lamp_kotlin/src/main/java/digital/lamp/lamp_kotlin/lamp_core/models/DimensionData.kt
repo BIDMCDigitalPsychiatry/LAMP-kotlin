@@ -95,3 +95,10 @@ data class AttitudeData(
     val y: Double?,
     val z: Double?
 )
+
+data class LowPowerModeData(
+        var device_type: String,
+        var value: Int,
+        val user_agent: String,
+        var action: String,
+)
