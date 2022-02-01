@@ -145,7 +145,7 @@ class ActivityTransitions : Service(), SensorEventListener {
                     val message = "Transition: $activity : $transition"
                     Log.e(TAG, " : $message")
 
-                    callback(activity,transition)
+                    callback?.let { it(activity,transition) }
                 }
             }
         }
@@ -175,7 +175,7 @@ class ActivityTransitions : Service(), SensorEventListener {
     }
     companion object {
         var TAG = "LAMP::Activity Transition"
-        lateinit var callback : (String,Boolean) -> Unit
+        private var callback : ((String,Boolean) -> Unit)?=null
         @JvmStatic
         fun setSensorObserver(listener: (String,Boolean) -> Unit) {
             callback = listener

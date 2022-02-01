@@ -50,7 +50,7 @@ class Accelerometer : Service(), SensorEventListener {
                         rowData.put(VALUES_2, event.values[2])
                         rowData.put(ACCURACY, event.accuracy)
 
-                        callback(rowData)
+                        callback?.let { it(rowData) }
                         LAST_TS = currentTimeStamp
                     } else {
                         isDataCollectionPaused = true
@@ -79,7 +79,7 @@ class Accelerometer : Service(), SensorEventListener {
             rowData.put(VALUES_2, event.values[2])
             rowData.put(ACCURACY, event.accuracy)
 
-            callback(rowData)
+            callback?.let { it(rowData) }
             LAST_TS = currentTimeStamp
 
             Log.e(TAG, rowData.toString())
@@ -153,7 +153,7 @@ class Accelerometer : Service(), SensorEventListener {
         private var FREQUENCY = -1
         private var THRESHOLD = 0.0
 
-        lateinit var callback: (ContentValues) -> Unit
+        private var callback: ((ContentValues) -> Unit)?=null
 
         private var interval: Long = LampConstants.INTERVAL
         private var pauseInterval: Long? = null

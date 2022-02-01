@@ -41,7 +41,7 @@ class Rotation : Service(), SensorEventListener {
         }
         rowData.put(ACCURACY, event.accuracy)
 
-        callback(rowData)
+        callback?.let { it(rowData) }
         LAST_TS = currentTimeStamp
 
     }
@@ -113,7 +113,7 @@ class Rotation : Service(), SensorEventListener {
         private var THRESHOLD = 0.0
         private var interval :Long = LampConstants.INTERVAL
 
-        lateinit var callback : (ContentValues) -> Unit
+        private var callback : ((ContentValues) -> Unit)?=null
         @JvmStatic
         fun setSensorObserver(listener: (ContentValues) -> Unit) {
             callback = listener

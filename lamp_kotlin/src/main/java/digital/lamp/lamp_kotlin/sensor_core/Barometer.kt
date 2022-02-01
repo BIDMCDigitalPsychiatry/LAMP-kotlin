@@ -41,7 +41,7 @@ class Barometer : Service(), SensorEventListener {
         rowData.put(AMBIENT_PRESSURE, event.values[0])
         rowData.put(ACCURACY, event.accuracy)
 
-        callback(rowData)
+        callback?.let { it(rowData) }
 
         LAST_SAVE = currentTimeStamp
     }
@@ -110,7 +110,7 @@ class Barometer : Service(), SensorEventListener {
         private var FREQUENCY = -1
         private var THRESHOLD = 0.0
 
-        lateinit var callback : (ContentValues) -> Unit
+        private var callback : ((ContentValues) -> Unit)? =null
         @JvmStatic
         fun setSensorObserver(listener: (ContentValues) -> Unit) {
             callback = listener
