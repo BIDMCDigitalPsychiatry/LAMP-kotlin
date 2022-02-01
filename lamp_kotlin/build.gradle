@@ -51,3 +51,14 @@ dependencies {
 
 }
 
+android {
+    afterEvaluate {
+        publishing {
+            publications {
+                release(MavenPublication) {
+                    from components.release
+                }
+            }
+        }
+    }
+}
