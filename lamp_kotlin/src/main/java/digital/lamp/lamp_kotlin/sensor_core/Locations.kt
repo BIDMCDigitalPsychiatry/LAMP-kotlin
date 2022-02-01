@@ -71,7 +71,7 @@ class Locations : Service(), OnSuccessListener<Location> {
             locationCallback,
             Looper.getMainLooper()
         )
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     private fun setLocationTimer() {

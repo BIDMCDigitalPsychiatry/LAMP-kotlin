@@ -49,7 +49,7 @@ class WiFi : Service() {
             alarmManager!!.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, LampConstants.FREQUENCY_WIFI * 1000.toLong(), wifiScan)
             if (Lamp.DEBUG) Log.d(TAG, "WiFi service active...")
         }
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     override fun onDestroy() {

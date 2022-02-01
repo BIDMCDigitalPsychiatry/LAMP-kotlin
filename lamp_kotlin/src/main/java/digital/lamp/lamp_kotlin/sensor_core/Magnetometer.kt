@@ -81,7 +81,7 @@ class Magnetometer : Service(), SensorEventListener {
                 mSensorManager!!.registerListener(this, mMagnetometer, newFrequency, sensorHandler)
                 if (Lamp.DEBUG) Log.d(TAG, "Magnetometer service active...")
         }
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     override fun onBind(intent: Intent): IBinder? {

@@ -87,7 +87,7 @@ class Rotation : Service(), SensorEventListener {
                 mSensorManager!!.registerListener(this, mRotation, newFrequency, sensorHandler)
                 if (Lamp.DEBUG) Log.d(TAG, "Rotation service active...")
             }
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     override fun onBind(intent: Intent): IBinder? {

@@ -86,7 +86,7 @@ class Barometer : Service(), SensorEventListener {
                 LAST_SAVE = System.currentTimeMillis()
                 if (Lamp.DEBUG) Log.d(TAG, "Barometer service active: " + FREQUENCY + "ms")
         }
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     override fun onBind(intent: Intent): IBinder? {

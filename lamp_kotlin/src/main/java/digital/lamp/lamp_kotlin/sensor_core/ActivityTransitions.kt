@@ -100,14 +100,14 @@ class ActivityTransitions : Service(), SensorEventListener {
         disableActivityTransitions()
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         Log.e(Companion.TAG, "Started Activity Transitions")
 
         //Register the BroadcastReceiver to listen for activity transitions.
         registerReceiver(mTransitionsReceiver, IntentFilter(actions))
         enableActivityTransitions()
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     override fun onBind(intent: Intent): IBinder? {
