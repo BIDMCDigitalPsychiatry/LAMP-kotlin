@@ -34,7 +34,7 @@ class Light : Service(), SensorEventListener {
         rowData.put(LIGHT_LUX, event.values[0])
         rowData.put(ACCURACY, event.accuracy)
 
-        callback(rowData)
+        callback?.let { it(rowData) }
         LAST_TS = currentTimeStamp
     }
 
@@ -79,7 +79,7 @@ class Light : Service(), SensorEventListener {
                 mSensorManager!!.registerListener(this, mLight, newFrequency, sensorHandler)
                 if (Lamp.DEBUG) Log.d(TAG, "Light service active: " + FREQUENCY + "ms")
             }
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -105,7 +105,7 @@ class Light : Service(), SensorEventListener {
         private const val ENFORCE_FREQUENCY = false
 
 
-        lateinit var callback : (ContentValues) -> Unit
+        private var callback : ((ContentValues) -> Unit)?=null
         @JvmStatic
         fun setSensorObserver(listener: (ContentValues) -> Unit) {
             callback = listener

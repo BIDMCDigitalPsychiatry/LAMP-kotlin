@@ -50,7 +50,7 @@ class Accelerometer : Service(), SensorEventListener {
                         rowData.put(VALUES_2, event.values[2])
                         rowData.put(ACCURACY, event.accuracy)
 
-                        callback(rowData)
+                        callback?.let { it(rowData) }
                         LAST_TS = currentTimeStamp
                     } else {
                         isDataCollectionPaused = true
@@ -79,7 +79,7 @@ class Accelerometer : Service(), SensorEventListener {
             rowData.put(VALUES_2, event.values[2])
             rowData.put(ACCURACY, event.accuracy)
 
-            callback(rowData)
+            callback?.let { it(rowData) }
             LAST_TS = currentTimeStamp
 
             Log.e(TAG, rowData.toString())
@@ -89,7 +89,7 @@ class Accelerometer : Service(), SensorEventListener {
     override fun onCreate() {
         super.onCreate()
         mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        mAccelerometer = mSensorManager!!.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        mAccelerometer = mSensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         sensorThread = HandlerThread(TAG)
         sensorThread!!.start()
         val powerManager = getSystemService(POWER_SERVICE) as PowerManager
@@ -103,7 +103,7 @@ class Accelerometer : Service(), SensorEventListener {
     override fun onDestroy() {
         super.onDestroy()
         sensorHandler!!.removeCallbacksAndMessages(null)
-        mSensorManager!!.unregisterListener(this, mAccelerometer)
+        mSensorManager?.unregisterListener(this, mAccelerometer)
         sensorThread!!.quit()
         wakeLock!!.release()
     }
@@ -120,14 +120,14 @@ class Accelerometer : Service(), SensorEventListener {
                 || THRESHOLD != newThreshold
             ) {
                 sensorHandler!!.removeCallbacksAndMessages(null)
-                mSensorManager!!.unregisterListener(this, mAccelerometer)
+                mSensorManager?.unregisterListener(this, mAccelerometer)
                 FREQUENCY = newFrequency
                 THRESHOLD = newThreshold
             }
-            mSensorManager!!.registerListener(this, mAccelerometer, FREQUENCY, sensorHandler)
+            mSensorManager?.registerListener(this, mAccelerometer, FREQUENCY, sensorHandler)
             if (Lamp.DEBUG) Log.d(TAG, "Accelerometer service active: $FREQUENCY ms")
         }
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -153,7 +153,7 @@ class Accelerometer : Service(), SensorEventListener {
         private var FREQUENCY = -1
         private var THRESHOLD = 0.0
 
-        lateinit var callback: (ContentValues) -> Unit
+        private var callback: ((ContentValues) -> Unit)?=null
 
         private var interval: Long = LampConstants.INTERVAL
         private var pauseInterval: Long? = null

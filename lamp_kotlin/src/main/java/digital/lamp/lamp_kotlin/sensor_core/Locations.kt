@@ -58,10 +58,10 @@ class Locations : Service(), OnSuccessListener<Location> {
                     if (interval != null) {
                         val currentTimeStamp = System.currentTimeMillis()
                         if (currentTimeStamp - LAST_TS < interval!!) return
-                        callback(location)
+                        callback?.let { it(location) }
                         LAST_TS = currentTimeStamp
                     } else {
-                        callback(location)
+                        callback?.let { it(location) }
                     }
                 }
             }
@@ -71,7 +71,7 @@ class Locations : Service(), OnSuccessListener<Location> {
             locationCallback,
             Looper.getMainLooper()
         )
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     private fun setLocationTimer() {
@@ -89,7 +89,7 @@ class Locations : Service(), OnSuccessListener<Location> {
         private var locationCallback: LocationCallback? = null
         private var locationRequest: LocationRequest? = null
 
-        lateinit var callback: (Location) -> Unit
+        private var callback: ((Location) -> Unit)? =null
         private var interval: Long? = null
         private var LAST_TS: Long = 0
         private var defaultInterval: Long? = null
@@ -114,7 +114,7 @@ class Locations : Service(), OnSuccessListener<Location> {
         val currentTimeStamp = System.currentTimeMillis()
         if (currentTimeStamp - LAST_TS < interval!!) return
         location?.let {
-            callback(it)
+            callback?.let { it1 -> it1(it) }
             LAST_TS = currentTimeStamp
         }
 

@@ -35,7 +35,7 @@ class LinearAccelerometer : Service(), SensorEventListener {
         rowData.put(VALUES_2, event.values[2])
         rowData.put(ACCURACY, event.accuracy)
 
-        callback(rowData)
+        callback?.let { it(rowData) }
 
         LAST_SAVE = currentTimeStamp
     }
@@ -43,7 +43,7 @@ class LinearAccelerometer : Service(), SensorEventListener {
     override fun onCreate() {
         super.onCreate()
         mSensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        mLinearAccelerator = mSensorManager!!.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
+        mLinearAccelerator = mSensorManager?.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
         sensorThread = HandlerThread(Companion.TAG)
         sensorThread!!.start()
         val powerManager = getSystemService(POWER_SERVICE) as PowerManager
@@ -57,7 +57,7 @@ class LinearAccelerometer : Service(), SensorEventListener {
     override fun onDestroy() {
         super.onDestroy()
         sensorHandler!!.removeCallbacksAndMessages(null)
-        mSensorManager!!.unregisterListener(this, mLinearAccelerator)
+        mSensorManager?.unregisterListener(this, mLinearAccelerator)
         sensorThread!!.quit()
         wakeLock!!.release()
         if (Lamp.DEBUG) Log.d(Companion.TAG, "Linear-accelerometer service terminated...")
@@ -82,7 +82,7 @@ class LinearAccelerometer : Service(), SensorEventListener {
                 LAST_SAVE = System.currentTimeMillis()
                 if (Lamp.DEBUG) Log.d(Companion.TAG, "Linear-accelerometer service active: " + FREQUENCY + "ms")
             }
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -108,7 +108,7 @@ class LinearAccelerometer : Service(), SensorEventListener {
         private var FREQUENCY = -1
         private var THRESHOLD = 0.0
 
-        lateinit var callback : (ContentValues) -> Unit
+        private var callback : ((ContentValues) -> Unit)?=null
         @JvmStatic
         fun setSensorObserver(listener: (ContentValues) -> Unit) {
             callback = listener
