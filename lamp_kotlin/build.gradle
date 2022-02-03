@@ -51,7 +51,6 @@ dependencies {
 
 }
 
-/*
 android {
     afterEvaluate {
         publishing {
@@ -62,4 +61,4 @@ android {
             }
         }
     }
-}*/
+}
