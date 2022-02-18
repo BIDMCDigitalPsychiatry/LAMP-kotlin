@@ -67,9 +67,9 @@ data class TokenData(
     var action: String,
     var device_token: String?,
     var device_type: String,
-    val user_agent: String
+    var user_agent: String
 ){
-    constructor() : this("",null,"", Build.VERSION.INCREMENTAL+","+ Build.MANUFACTURER+","+ Build.MODEL)
+    constructor() : this("",null,"", "")
 }
 
 data class ActivityData(
