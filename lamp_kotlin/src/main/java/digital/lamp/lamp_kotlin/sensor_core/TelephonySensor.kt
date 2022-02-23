@@ -11,11 +11,10 @@ import android.util.Log
 import kotlin.math.floor
 
 /**
- * Service that logs users' interactions with the screen
- * - on/off events
- * - locked/unlocked events
+ * Service that logs telephony data
  *
- * @author denzil
+ *
+ *
  */
 class TelephonySensor : Service() {
     private var phoneCallReceiver: PhonecallReceiver? = null
@@ -29,20 +28,20 @@ class TelephonySensor : Service() {
       //  fun onIncomingCallReceived(ctx: Context?, start: Long?)
        // fun onIncomingCallAnswered(ctx: Context?, start: Long?)
       // fun onOutgoingCallStarted( start: Long?)
-        fun onIncomingCallEnded(callDuration:Double?)
-        fun onOutgoingCallEnded( callDuration:Double?)
+        fun onIncomingCallEnded(callDuration:Int?)
+        fun onOutgoingCallEnded( callDuration:Int?)
         fun onMissedCall()
     }
 
     override fun onCreate() {
         super.onCreate()
-        if (Lamp.DEBUG) Log.d(TAG, "Screen service created!")
+        if (Lamp.DEBUG) Log.d(TAG, "Telephony service created!")
     }
 
     override fun onDestroy() {
         super.onDestroy()
         if (phoneCallReceiver != null) unregisterReceiver(phoneCallReceiver)
-        if (Lamp.DEBUG) Log.d(TAG, "Screen service terminated...")
+        if (Lamp.DEBUG) Log.d(TAG, "Telephony service terminated...")
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
@@ -62,19 +61,13 @@ class TelephonySensor : Service() {
 
                         val callDuration = endTime?.let { end -> startTime?.let { start -> end - start } }
                         callDuration?.let {
-                            val callDurationInSec: Double = floor(((it / 1000) % 60).toDouble())
+                            val callDurationInSec: Int = (((it / 1000) % 60).toInt())
                             if (sensorObserver != null) sensorObserver!!.onIncomingCallEnded(callDurationInSec)
                             if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_INCOMING_CALL)
                         }
                     }
                 }
 
-              /*  sendBroadcast(Intent(ACTION_LAMP_SCREEN_OFF))
-                if (km.isKeyguardLocked) {
-                    if (sensorObserver != null) sensorObserver!!.onScreenLocked()
-                    if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_SCREEN_LOCKED)
-                    sendBroadcast(Intent(ACTION_LAMP_SCREEN_LOCKED))
-                }*/
                 return START_STICKY
             }
             if (intent.action == ACTION_LAMP_OUTGOING_CALL) {
@@ -85,7 +78,7 @@ class TelephonySensor : Service() {
 
                         val callDuration = endTime?.let { end -> startTime?.let { start -> end - start } }
                         callDuration?.let {
-                            val callDurationInSec: Double = floor(((it / 1000) % 60).toDouble())
+                            val callDurationInSec: Int =(((it / 1000) % 60).toInt())
                             if (sensorObserver != null) sensorObserver!!.onOutgoingCallEnded(callDurationInSec)
                             if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_INCOMING_CALL)
                         }
@@ -99,33 +92,6 @@ class TelephonySensor : Service() {
             val filter = IntentFilter()
             filter.addAction("android.intent.action.PHONE_STATE")
             registerReceiver(phoneCallReceiver, filter)
-
-
-           /* val pm = getSystemService(POWER_SERVICE) as PowerManager
-            val km = getSystemService(KEYGUARD_SERVICE) as KeyguardManager
-            if (pm.isInteractive) {
-                if (sensorObserver != null) sensorObserver!!.onScreenOn()
-                if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_SCREEN_ON)
-                sendBroadcast(Intent(ACTION_LAMP_SCREEN_ON))
-                if (km.isKeyguardLocked) {
-                    if (sensorObserver != null) sensorObserver!!.onScreenUnlocked()
-                    if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_SCREEN_LOCKED)
-                    sendBroadcast(Intent(ACTION_LAMP_SCREEN_LOCKED))
-                } else {
-                    if (sensorObserver != null) sensorObserver!!.onScreenUnlocked()
-                    if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_SCREEN_UNLOCKED)
-                    sendBroadcast(Intent(ACTION_LAMP_SCREEN_UNLOCKED))
-                }
-            } else {
-                if (sensorObserver != null) sensorObserver!!.onScreenOff()
-                if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_SCREEN_OFF)
-                sendBroadcast(Intent(ACTION_LAMP_SCREEN_OFF))
-                if (km.isKeyguardLocked) {
-                    if (sensorObserver != null) sensorObserver!!.onScreenLocked()
-                    if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_SCREEN_LOCKED)
-                    sendBroadcast(Intent(ACTION_LAMP_SCREEN_LOCKED))
-                }
-            }*/
         }
         if (Lamp.DEBUG) Log.d(TAG, "Telephony service active...")
         return START_STICKY

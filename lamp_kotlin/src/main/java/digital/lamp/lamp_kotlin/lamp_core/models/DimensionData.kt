@@ -104,7 +104,7 @@ data class LowPowerModeData(
 )
 
 data class TelephonyData(
-    val duration: Double?,
+    val duration: Int?,
     val trace: String?,
     val type: String?
 )
