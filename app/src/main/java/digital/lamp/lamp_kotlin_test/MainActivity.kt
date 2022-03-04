@@ -5,11 +5,9 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import digital.lamp.lamp_kotlin.lamp_core.apis.ActivityAPI
-import digital.lamp.lamp_kotlin.lamp_core.apis.SensorAPI
 import digital.lamp.lamp_kotlin.lamp_core.models.ActivityResponse
-import digital.lamp.lamp_kotlin.lamp_core.models.DimensionData
-import digital.lamp.lamp_kotlin.lamp_core.models.SensorSpec
-import org.json.JSONObject
+import digital.lamp.lamp_kotlin.sensor_core.Lamp
+import digital.lamp.lamp_kotlin.sensor_core.TelephonySensor
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,6 +15,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         invokeSensorSpecData()
+        Lamp.startTelephony(this)
+
+        TelephonySensor.setSensorObserver(object :TelephonySensor.TelephonyListener{
+            override fun onIncomingCallEnded(callDuration: Double?) {
+                Log.e("MainActivity", "Incoming callDuration $callDuration")
+            }
+
+            override fun onOutgoingCallEnded(callDuration: Double?) {
+                Log.e("MainActivity", "Incoming callDuration $callDuration")
+            }
+
+            override fun onMissedCall() {
+                Log.e("MainActivity", "Missed")
+            }
+
+        })
 
     }
 
@@ -32,6 +46,8 @@ class MainActivity : AppCompatActivity() {
 
                 Log.e("KOK", " Lamp Core Response -  ${activityResponse.data[0].schedule?.get(0)?.notification_ids?.size.toString()}")
             }.start()
+
+
 
     }
 }

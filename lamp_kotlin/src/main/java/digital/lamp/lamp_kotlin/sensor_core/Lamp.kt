@@ -220,6 +220,7 @@ class Lamp : Service() {
         private var significantSrv: Intent? = null
         private val websocket: Intent? = null
         private var gravitySrv: Intent? = null
+        private var telephonySrv: Intent? = null
         /**
          * Variable for the Doze ignore list
          */
@@ -289,6 +290,7 @@ class Lamp : Service() {
             stopLinearAccelerometer(context)
             stopActivityTransition(context)
             stopGravity(context)
+            stopTelephony(context)
         }
 
         /**
@@ -490,6 +492,23 @@ class Lamp : Service() {
         private fun stopGravity(context: Context?) {
             if (context == null) return
             if (gravitySrv != null) context.stopService(gravitySrv)
+        }
+
+        /**
+         * Start the screen module
+         */
+        fun startTelephony(context: Context?) {
+            if (context == null) return
+            if (telephonySrv == null) telephonySrv = Intent(context, TelephonySensor::class.java)
+            context.startService(telephonySrv)
+        }
+
+        /**
+         * Stop the gravity module
+         */
+        private fun stopTelephony(context: Context?) {
+            if (context == null) return
+            if (telephonySrv != null) context.stopService(telephonySrv)
         }
     }
 }

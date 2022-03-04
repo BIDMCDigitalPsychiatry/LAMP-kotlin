@@ -102,3 +102,9 @@ data class LowPowerModeData(
         val user_agent: String,
         var action: String,
 )
+
+data class TelephonyData(
+    val duration: Int?,
+    val trace: String?,
+    val type: String?
+)
