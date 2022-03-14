@@ -114,3 +114,23 @@ data class StepsData(
         val type: Any?,
         var source:Any?,
 )
+
+data class NutritionData(
+        val unit: String?,
+        val value: Any?,
+        val type: Any?,
+        var source:Any?,
+)
+
+data class GoogleFitData(
+        val unit: String?,
+        val value: Any?,
+        var source:Any?,
+)
+
+data class BloodPressure(
+
+val systolic: BloodPressureData?,
+val diastolic: BloodPressureData?,
+)
+
