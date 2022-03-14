@@ -107,3 +107,10 @@ data class TelephonyData(
     val duration: Int?,
     val type: String?
 )
+
+data class StepsData(
+        val unit: String?,
+        val value: Any?,
+        val type: Any?,
+        var source:Any?,
+)
