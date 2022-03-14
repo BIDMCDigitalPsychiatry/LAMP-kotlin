@@ -54,7 +54,7 @@ class Screen : Service() {
                     if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_SCREEN_LOCKED)
                     sendBroadcast(Intent(ACTION_LAMP_SCREEN_LOCKED))
                 }
-                return START_STICKY
+                return START_REDELIVER_INTENT
             }
             if (intent.action == ACTION_LAMP_SCREEN_OFF) {
                 if (sensorObserver != null) sensorObserver!!.onScreenOff()
@@ -65,7 +65,7 @@ class Screen : Service() {
                     if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_SCREEN_LOCKED)
                     sendBroadcast(Intent(ACTION_LAMP_SCREEN_LOCKED))
                 }
-                return START_STICKY
+                return START_REDELIVER_INTENT
             }
             if (intent.action == ACTION_LAMP_SCREEN_UNLOCKED) {
                 if (!km.isKeyguardLocked) {
@@ -73,7 +73,7 @@ class Screen : Service() {
                     if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_SCREEN_UNLOCKED)
                     sendBroadcast(Intent(ACTION_LAMP_SCREEN_UNLOCKED))
                 }
-                return START_STICKY
+                return START_REDELIVER_INTENT
             }
         }
         if (screenMonitor == null) {
@@ -111,7 +111,7 @@ class Screen : Service() {
             }
         }
         if (Lamp.DEBUG) Log.d(TAG, "Screen service active...")
-        return START_STICKY
+        return START_REDELIVER_INTENT
     }
 
     private inner class ScreenMonitor : BroadcastReceiver() {

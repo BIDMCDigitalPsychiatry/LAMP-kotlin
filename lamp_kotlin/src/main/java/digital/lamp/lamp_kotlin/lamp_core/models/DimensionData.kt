@@ -29,7 +29,7 @@ data class DimensionData(
         val value: Any?,
         val type: Any?,
         val activity: ActivityData?,
-        val source:String?,
+        val source:Any?,
         val duration: Long?
 )
 
@@ -105,6 +105,5 @@ data class LowPowerModeData(
 
 data class TelephonyData(
     val duration: Int?,
-    val trace: String?,
     val type: String?
 )
