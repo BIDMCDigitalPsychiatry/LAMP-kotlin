@@ -29,7 +29,7 @@ data class DimensionData(
         val value: Any?,
         val type: Any?,
         val activity: ActivityData?,
-        val source:Any?,
+        var source:Any?,
         val duration: Long?
 )
 
@@ -87,7 +87,7 @@ data class ActivityData(
 data class BloodPressureData(
         val value: Float,
         val units: String?,
-        val source: String?
+        var source: Any?
 )
 
 data class AttitudeData(
