@@ -18,12 +18,13 @@ class MainActivity : AppCompatActivity() {
         Lamp.startTelephony(this)
 
         TelephonySensor.setSensorObserver(object :TelephonySensor.TelephonyListener{
-            override fun onIncomingCallEnded(callDuration: Double?) {
-                Log.e("MainActivity", "Incoming callDuration $callDuration")
+
+            override fun onIncomingCallEnded(callDuration: Int?) {
+                TODO("Not yet implemented")
             }
 
-            override fun onOutgoingCallEnded(callDuration: Double?) {
-                Log.e("MainActivity", "Incoming callDuration $callDuration")
+            override fun onOutgoingCallEnded(callDuration: Int?) {
+                TODO("Not yet implemented")
             }
 
             override fun onMissedCall() {
