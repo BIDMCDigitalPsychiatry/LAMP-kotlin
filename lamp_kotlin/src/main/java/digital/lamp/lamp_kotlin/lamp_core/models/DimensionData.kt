@@ -134,3 +134,9 @@ val systolic: BloodPressureData?,
 val diastolic: BloodPressureData?,
 )
 
+data class SleepData(
+        val representation: String?,
+        val value: Any?,
+        var source:Any?,
+        val duration: Long?
+)
