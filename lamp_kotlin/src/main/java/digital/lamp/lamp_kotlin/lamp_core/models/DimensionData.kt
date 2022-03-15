@@ -1,5 +1,6 @@
 package digital.lamp.lamp_kotlin.lamp_core.models
 
+import com.squareup.moshi.JsonClass
 import digital.lamp.lamp_kotlin.lamp_core.infrastructure.SerializeNulls
 
 /**
@@ -83,11 +84,12 @@ data class ActivityData(
 ) {
     constructor() : this(null, null, null, null, null, null, null)
 }
-
+@JsonClass(generateAdapter = true)
 data class BloodPressureData(
         val value: Float,
         val units: String?,
-        @SerializeNulls var source: Any?
+        @field:[SerializeNulls]
+        var source: Any?
 )
 
 data class AttitudeData(
@@ -107,7 +109,7 @@ data class TelephonyData(
         val duration: Int?,
         val type: String?
 )
-
+@JsonClass(generateAdapter = true)
 data class StepsData(
         val unit: String?,
         val value: Any?,
@@ -115,26 +117,26 @@ data class StepsData(
         @field:[SerializeNulls]
          var source: Any?,
 )
-
+@JsonClass(generateAdapter = true)
 data class NutritionData(
         val unit: String?,
         val value: Any?,
         val type: Any?,
         @field:[SerializeNulls] var source: Any?,
 )
-
+@JsonClass(generateAdapter = true)
 data class GoogleFitData(
         val unit: String?,
         val value: Any?,
         @field:[SerializeNulls] var source: Any?,
 )
-
+@JsonClass(generateAdapter = true)
 data class BloodPressure(
 
         val systolic: BloodPressureData?,
         val diastolic: BloodPressureData?,
 )
-
+@JsonClass(generateAdapter = true)
 data class SleepData(
         val representation: String?,
         val value: Any?,
