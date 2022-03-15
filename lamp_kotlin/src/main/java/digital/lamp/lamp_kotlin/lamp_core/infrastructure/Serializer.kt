@@ -14,11 +14,14 @@ object Serializer {
         .add(LocalDateAdapter())
         .add(UUIDAdapter())
         .add(ByteArrayAdapter())
-        .add(KotlinJsonAdapterFactory())
             .add(SerializeNulls.JSON_ADAPTER_FACTORY)
+        .addLast(KotlinJsonAdapterFactory())
+
 
     @JvmStatic
     val moshi: Moshi by lazy {
         moshiBuilder.build()
+
+
     }
 }
