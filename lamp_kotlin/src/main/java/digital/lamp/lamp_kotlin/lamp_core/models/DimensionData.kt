@@ -112,20 +112,21 @@ data class StepsData(
         val unit: String?,
         val value: Any?,
         val type: Any?,
-        @SerializeNulls var source: Any?,
+        @field:[SerializeNulls]
+         var source: Any?,
 )
 
 data class NutritionData(
         val unit: String?,
         val value: Any?,
         val type: Any?,
-        @SerializeNulls var source: Any?,
+        @field:[SerializeNulls] var source: Any?,
 )
 
 data class GoogleFitData(
         val unit: String?,
         val value: Any?,
-        @SerializeNulls var source: Any?,
+        @field:[SerializeNulls] var source: Any?,
 )
 
 data class BloodPressure(
@@ -137,6 +138,6 @@ data class BloodPressure(
 data class SleepData(
         val representation: String?,
         val value: Any?,
-        @SerializeNulls var source: Any?,
+        @field:[SerializeNulls] var source: Any?,
         val duration: Long?
 )
