@@ -210,7 +210,7 @@ class SensorEventAPI(basePath: String = defaultBasePath) : ApiClient(basePath) {
     */
     @Suppress("UNCHECKED_CAST")
     @Throws(UnsupportedOperationException::class, ClientException::class, ServerException::class)
-    fun sensorEventCreate(participantId: String, sensorEvent: Any, basic: String) : String {
+    fun sensorEventCreate(participantId: String, sensorEvent: Any, basic: String, isGoogleFitData:Boolean= false) : String {
         val localVariableBody: Any? = sensorEvent
         val localVariableQuery: MultiValueMap = mutableMapOf()
         val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
@@ -226,7 +226,7 @@ class SensorEventAPI(basePath: String = defaultBasePath) : ApiClient(basePath) {
         )
         val localVarResponse = request<String>(
                 localVariableConfig,
-                localVariableBody
+                localVariableBody, isGoogleFitData
         )
 
         return when (localVarResponse.responseType) {

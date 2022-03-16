@@ -56,7 +56,7 @@ open class ApiClient(val baseUrl: String) {
         return contentType ?: "application/octet-stream"
     }
 
-    protected inline fun <reified T> requestBody(content: T, mediaType: String = JsonMediaType): RequestBody =
+    protected inline fun <reified T> requestBody(content: T, mediaType: String = JsonMediaType, isGooglefitData:Boolean = false): RequestBody =
         when {
             content is File -> content.asRequestBody(
                 mediaType.toMediaTypeOrNull()
@@ -97,9 +97,17 @@ open class ApiClient(val baseUrl: String) {
                     }
                 }.build()
             }
-            mediaType == JsonMediaType -> Serializer.moshi.adapter(T::class.java).toJson(content).toRequestBody(
-                mediaType.toMediaTypeOrNull()
-            )
+            mediaType == JsonMediaType -> {
+                if(isGooglefitData){
+                    Serializer.moshi.adapter(T::class.java).serializeNulls().toJson(content).toRequestBody(
+                            mediaType.toMediaTypeOrNull()
+                    )
+                }else {
+                    Serializer.moshi.adapter(T::class.java).toJson(content).toRequestBody(
+                            mediaType.toMediaTypeOrNull()
+                    )
+                }
+            }
             mediaType == XmlMediaType -> throw UnsupportedOperationException("xml not currently supported.")
             // TODO: this should be extended with other serializers
             else -> throw UnsupportedOperationException("requestBody currently only supports JSON body and File body.")
@@ -131,7 +139,7 @@ open class ApiClient(val baseUrl: String) {
         }
     }
 
-    protected inline fun <reified T: Any?> request(requestConfig: RequestConfig, body : Any? = null): ApiInfrastructureResponse<T?> {
+    protected inline fun <reified T: Any?> request(requestConfig: RequestConfig, body : Any? = null,  isGoogleFitData:Boolean= false): ApiInfrastructureResponse<T?> {
         val httpUrl = baseUrl.toHttpUrlOrNull() ?: throw IllegalStateException("baseUrl is invalid.")
 
         // take authMethod from operation
@@ -173,7 +181,7 @@ open class ApiClient(val baseUrl: String) {
             RequestMethod.HEAD -> Request.Builder().url(url).head()
             RequestMethod.PATCH -> Request.Builder().url(url).patch(requestBody(body, contentType))
             RequestMethod.PUT -> Request.Builder().url(url).put(requestBody(body, contentType))
-            RequestMethod.POST -> Request.Builder().url(url).post(requestBody(body, contentType))
+            RequestMethod.POST -> Request.Builder().url(url).post(requestBody(body, contentType, isGoogleFitData))
             RequestMethod.OPTIONS -> Request.Builder().url(url).method("OPTIONS", null)
         }.apply {
             headers.forEach { header -> addHeader(header.key, header.value) }
