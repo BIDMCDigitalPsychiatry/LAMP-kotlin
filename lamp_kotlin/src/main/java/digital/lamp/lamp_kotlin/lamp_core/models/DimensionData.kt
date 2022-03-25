@@ -19,7 +19,7 @@ data class DimensionData(
         val altitude: Double?,
         val accuracy: Float?,
         val representation: String?,
-        val battery_level: Int?,
+        val battery_level: Float?,
         val bssid: String?,
         val ssid: String?,
         val rssi: Int?,
