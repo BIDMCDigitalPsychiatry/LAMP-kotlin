@@ -59,13 +59,13 @@ data class MagnetData(
 )
 
 data class NotificationData(
-        val action: String,
+        val type: String,
         val user_action: String?,
         val payload: String
 )
 
 data class TokenData(
-        var action: String,
+        var type: String,
         var device_token: String?,
         var device_type: String,
         var user_agent: String
@@ -102,7 +102,7 @@ data class LowPowerModeData(
         var device_type: String,
         var value: Int,
         val user_agent: String,
-        var action: String,
+        var type: String,
 )
 
 data class TelephonyData(
