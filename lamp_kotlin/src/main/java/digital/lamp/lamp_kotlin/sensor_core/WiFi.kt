@@ -30,7 +30,7 @@ class WiFi : Service() {
         registerReceiver(wifiMonitor, filter)
         backgroundService = Intent(this, BackgroundService::class.java)
         backgroundService!!.action = ACTION_LAMP_WIFI_REQUEST_SCAN
-        wifiScan = PendingIntent.getService(this, 0, backgroundService!!, PendingIntent.FLAG_UPDATE_CURRENT)
+        wifiScan = PendingIntent.getService(this, 0, backgroundService!!, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 
     interface LAMPSensorObserver {

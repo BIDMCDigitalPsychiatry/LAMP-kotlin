@@ -83,7 +83,7 @@ class ActivityTransitions : Service(), SensorEventListener {
 
         // TODO: Initialize PendingIntent that will be triggered when a activity transition occurs.
         val intent = Intent(actions)
-        mActivityTransitionsPendingIntent = PendingIntent.getBroadcast(this@ActivityTransitions, 0, intent, 0)
+        mActivityTransitionsPendingIntent = PendingIntent.getBroadcast(this@ActivityTransitions, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         // TODO: Create a BroadcastReceiver to listen for activity transitions.
         // The receiver listens for the PendingIntent above that is triggered by the system when an
