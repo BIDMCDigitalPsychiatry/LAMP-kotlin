@@ -60,8 +60,8 @@ data class MagnetData(
 
 data class NotificationData(
         val type: String,
-        val user_action: String?,
-        val payload: String
+        val payload: String,
+        val user_agent: String
 )
 
 data class TokenData(
