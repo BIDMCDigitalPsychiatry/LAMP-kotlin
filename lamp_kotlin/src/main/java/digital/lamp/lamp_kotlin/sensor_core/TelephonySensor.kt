@@ -28,8 +28,8 @@ class TelephonySensor : Service() {
       //  fun onIncomingCallReceived(ctx: Context?, start: Long?)
        // fun onIncomingCallAnswered(ctx: Context?, start: Long?)
       // fun onOutgoingCallStarted( start: Long?)
-        fun onIncomingCallEnded(callDuration:Int?)
-        fun onOutgoingCallEnded( callDuration:Int?)
+        fun onIncomingCallEnded(callDuration:Long?)
+        fun onOutgoingCallEnded( callDuration:Long?)
         fun onMissedCall()
     }
 
