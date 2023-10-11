@@ -19,11 +19,11 @@ class MainActivity : AppCompatActivity() {
 
         TelephonySensor.setSensorObserver(object :TelephonySensor.TelephonyListener{
 
-            override fun onIncomingCallEnded(callDuration: Int?) {
+            override fun onIncomingCallEnded(callDuration: Long?) {
                 TODO("Not yet implemented")
             }
 
-            override fun onOutgoingCallEnded(callDuration: Int?) {
+            override fun onOutgoingCallEnded(callDuration: Long?) {
                 TODO("Not yet implemented")
             }
 
