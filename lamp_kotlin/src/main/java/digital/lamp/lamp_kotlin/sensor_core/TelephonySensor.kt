@@ -25,9 +25,6 @@ class TelephonySensor : Service() {
 
     interface TelephonyListener {
 
-      //  fun onIncomingCallReceived(ctx: Context?, start: Long?)
-       // fun onIncomingCallAnswered(ctx: Context?, start: Long?)
-      // fun onOutgoingCallStarted( start: Long?)
         fun onIncomingCallEnded(callDuration:Long?)
         fun onOutgoingCallEnded( callDuration:Long?)
         fun onMissedCall()
@@ -44,6 +41,15 @@ class TelephonySensor : Service() {
         if (Lamp.DEBUG) Log.d(TAG, "Telephony service terminated...")
     }
 
+    /**
+     * On start command
+     *
+     * @param intent
+     * @param flags
+     * @param startId
+      Notifies the listeners with call duration in milliseconds.
+     * @return
+     */
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         if(intent!=null) {
