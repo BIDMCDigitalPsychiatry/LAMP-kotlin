@@ -59,11 +59,9 @@ class TelephonySensor : Service() {
                         if (intent.hasExtra("call_end_time")) {
                             val startTime = intent.getLongExtra("call_start_time", 0)
                             val endTime = intent.getLongExtra("call_end_time", 0)
-
                             val callDuration = endTime?.let { end -> startTime?.let { start -> end - start } }
                             callDuration?.let {
-                                val callDurationInSec: Int = (((it / 1000) % 60).toInt())
-                                if (sensorObserver != null) sensorObserver!!.onIncomingCallEnded(callDurationInSec)
+                                if (sensorObserver != null) sensorObserver!!.onIncomingCallEnded(callDuration)
                                 if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_INCOMING_CALL)
                             }
                         }
@@ -76,11 +74,9 @@ class TelephonySensor : Service() {
                         if (intent.hasExtra("call_end_time")) {
                             val startTime = intent.getLongExtra("call_start_time", 0)
                             val endTime = intent.getLongExtra("call_end_time", 0)
-
                             val callDuration = endTime?.let { end -> startTime?.let { start -> end - start } }
                             callDuration?.let {
-                                val callDurationInSec: Int = (((it / 1000) % 60).toInt())
-                                if (sensorObserver != null) sensorObserver!!.onOutgoingCallEnded(callDurationInSec)
+                                if (sensorObserver != null) sensorObserver!!.onOutgoingCallEnded(callDuration)
                                 if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_INCOMING_CALL)
                             }
                         }
