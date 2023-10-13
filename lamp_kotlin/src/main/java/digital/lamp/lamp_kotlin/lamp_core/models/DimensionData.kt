@@ -105,7 +105,7 @@ data class LowPowerModeData(
         var type: String,
 )
 
-data class TelephonyData (
+data class TelephonyData(
         val duration: Long?,
         val type: String?
 )
