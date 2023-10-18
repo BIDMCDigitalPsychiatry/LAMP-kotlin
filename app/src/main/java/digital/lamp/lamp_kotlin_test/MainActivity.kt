@@ -19,11 +19,11 @@ class MainActivity : AppCompatActivity() {
 
         TelephonySensor.setSensorObserver(object :TelephonySensor.TelephonyListener{
 
-            override fun onIncomingCallEnded(callDuration: Int?) {
+            override fun onIncomingCallEnded(callDuration: Long?) {
                 TODO("Not yet implemented")
             }
 
-            override fun onOutgoingCallEnded(callDuration: Int?) {
+            override fun onOutgoingCallEnded(callDuration: Long?) {
                 TODO("Not yet implemented")
             }
 
@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun invokeSensorSpecData(){
 
-            val basic = "Basic ${Utils.toBase64(
+         /*   val basic = "Basic ${Utils.toBase64(
                     "U3039047323@lamp.com:U3039047323")}"
 
             Thread {
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 val activityResponse = Gson().fromJson(activityString.toString(), ActivityResponse::class.java)
 
                 Log.e("KOK", " Lamp Core Response -  ${activityResponse.data[0].schedule?.get(0)?.notification_ids?.size.toString()}")
-            }.start()
+            }.start()*/
 
 
 

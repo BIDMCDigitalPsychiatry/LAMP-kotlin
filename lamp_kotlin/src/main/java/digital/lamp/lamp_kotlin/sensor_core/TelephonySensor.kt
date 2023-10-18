@@ -25,11 +25,8 @@ class TelephonySensor : Service() {
 
     interface TelephonyListener {
 
-      //  fun onIncomingCallReceived(ctx: Context?, start: Long?)
-       // fun onIncomingCallAnswered(ctx: Context?, start: Long?)
-      // fun onOutgoingCallStarted( start: Long?)
-        fun onIncomingCallEnded(callDuration:Int?)
-        fun onOutgoingCallEnded( callDuration:Int?)
+        fun onIncomingCallEnded(callDuration:Long?)
+        fun onOutgoingCallEnded( callDuration:Long?)
         fun onMissedCall()
     }
 
@@ -44,6 +41,15 @@ class TelephonySensor : Service() {
         if (Lamp.DEBUG) Log.d(TAG, "Telephony service terminated...")
     }
 
+    /**
+     * On start command
+     *
+     * @param intent
+     * @param flags
+     * @param startId
+      Notifies the listeners with call duration in milliseconds.
+     * @return
+     */
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         if(intent!=null) {
@@ -59,11 +65,9 @@ class TelephonySensor : Service() {
                         if (intent.hasExtra("call_end_time")) {
                             val startTime = intent.getLongExtra("call_start_time", 0)
                             val endTime = intent.getLongExtra("call_end_time", 0)
-
                             val callDuration = endTime?.let { end -> startTime?.let { start -> end - start } }
                             callDuration?.let {
-                                val callDurationInSec: Int = (((it / 1000) % 60).toInt())
-                                if (sensorObserver != null) sensorObserver!!.onIncomingCallEnded(callDurationInSec)
+                                if (sensorObserver != null) sensorObserver!!.onIncomingCallEnded(callDuration)
                                 if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_INCOMING_CALL)
                             }
                         }
@@ -76,11 +80,9 @@ class TelephonySensor : Service() {
                         if (intent.hasExtra("call_end_time")) {
                             val startTime = intent.getLongExtra("call_start_time", 0)
                             val endTime = intent.getLongExtra("call_end_time", 0)
-
                             val callDuration = endTime?.let { end -> startTime?.let { start -> end - start } }
                             callDuration?.let {
-                                val callDurationInSec: Int = (((it / 1000) % 60).toInt())
-                                if (sensorObserver != null) sensorObserver!!.onOutgoingCallEnded(callDurationInSec)
+                                if (sensorObserver != null) sensorObserver!!.onOutgoingCallEnded(callDuration)
                                 if (Lamp.DEBUG) Log.d(TAG, ACTION_LAMP_INCOMING_CALL)
                             }
                         }

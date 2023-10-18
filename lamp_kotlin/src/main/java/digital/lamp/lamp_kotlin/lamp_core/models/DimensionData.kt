@@ -106,7 +106,7 @@ data class LowPowerModeData(
 )
 
 data class TelephonyData(
-        val duration: Int?,
+        val duration: Long?,
         val type: String?
 )
 @JsonClass(generateAdapter = true)
