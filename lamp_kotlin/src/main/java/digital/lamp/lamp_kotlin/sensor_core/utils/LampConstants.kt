@@ -24,7 +24,7 @@ internal object LampConstants {
     const val FREQUENCY_GYROSCOPE : Int = 200000
     const val THRESHOLD_GYROSCOPE : Double = 1.0
 
-    const val FREQUENCY_WIFI : Int = 5
+    const val FREQUENCY_WIFI : Int = 60 * 5
 
     const val INTERVAL : Long = 200//1000
 

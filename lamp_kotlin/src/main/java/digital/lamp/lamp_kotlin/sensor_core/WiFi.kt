@@ -17,7 +17,7 @@ import java.util.concurrent.Executors
 
 /**
  * WiFi Module. Scans and returns surrounding WiFi AccessPoints devices information and RSSI dB values.
- *
+ * Enable location permission to scan wifi
  * @author denzil
  */
 class WiFi : Service() {
