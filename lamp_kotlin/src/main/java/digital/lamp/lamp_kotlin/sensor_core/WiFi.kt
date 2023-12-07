@@ -44,9 +44,26 @@ class WiFi : Service() {
         super.onStartCommand(intent, flags, startId)
         if (wifiManager == null) {
             stopSelf()
-        } else {
-            alarmManager!!.cancel(wifiScan)
-            alarmManager!!.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 1000, LampConstants.FREQUENCY_WIFI * 1000.toLong(), wifiScan)
+        }  else {
+            if (frequency != null && frequency!! >= LampConstants.FREQUENCY_WIFI){
+                alarmManager!!.cancel(wifiScan)
+                alarmManager!!.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    System.currentTimeMillis() + 1000,
+                    frequency!! * 1000,
+                    wifiScan
+                )
+            }else{
+                alarmManager!!.cancel(wifiScan)
+                alarmManager!!.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    System.currentTimeMillis() + 1000,
+                    LampConstants.FREQUENCY_WIFI * 1000.toLong(),
+                    wifiScan
+                )
+            }
+
+
             if (Lamp.DEBUG) Log.d(TAG, "WiFi service active...")
         }
         return START_REDELIVER_INTENT
@@ -178,7 +195,7 @@ class WiFi : Service() {
         private var wifiManager: WifiManager? = null
         private var wifiScan: PendingIntent? = null
         private var backgroundService: Intent? = null
-
+        private var frequency :Long?= null
         /**
          * Broadcasted event: WiFi scan started
          */
@@ -194,5 +211,10 @@ class WiFi : Service() {
          */
         const val ACTION_LAMP_WIFI_REQUEST_SCAN = "ACTION_LAMP_WIFI_REQUEST_SCAN"
         var sensorObserver: LAMPSensorObserver? = null
+
+        @JvmStatic
+        fun setInterval(frequency: Long) {
+            this.frequency = frequency
+        }
     }
 }
