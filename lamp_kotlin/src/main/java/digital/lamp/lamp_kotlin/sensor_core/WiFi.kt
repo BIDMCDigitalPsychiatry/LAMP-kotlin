@@ -13,9 +13,12 @@ import android.content.pm.PackageManager
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import digital.lamp.lamp_kotlin.sensor_core.utils.LampConstants
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
@@ -53,12 +56,14 @@ class WiFi : Service() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Start bluetooth discovery
-        if (ActivityCompat.checkSelfPermission(
+        // Start discovery
+        if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.BLUETOOTH_SCAN
             ) != PackageManager.PERMISSION_GRANTED
         ) {
+
+        }else{
             val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             if (bluetoothAdapter != null && bluetoothAdapter.isDiscovering) {
                 bluetoothAdapter.cancelDiscovery()
@@ -107,6 +112,7 @@ class WiFi : Service() {
                         LampConstants.FREQUENCY_WIFI * 1000.toLong(),
                         wifiScan
                     )
+
                 }
             } else {
                 alarmManager?.cancel(wifiScan)
@@ -118,8 +124,11 @@ class WiFi : Service() {
                 )
 
             }
+
+
             if (Lamp.DEBUG) Log.d(TAG, "WiFi service active...")
         }
+
         scheduleBluetoothAlarm()
         return START_REDELIVER_INTENT
     }
@@ -194,6 +203,9 @@ class WiFi : Service() {
                                 Manifest.permission.BLUETOOTH_CONNECT
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
+
+
+                        }else{
                             val device =
                                 intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                             device?.let {
@@ -210,7 +222,6 @@ class WiFi : Service() {
                                     rowData
                                 )
                             }
-
                         }
                     }
                 }
@@ -233,6 +244,8 @@ class WiFi : Service() {
                                 Manifest.permission.BLUETOOTH_CONNECT
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
+
+                        }else{
                             val device =
                                 intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                             device?.let {
@@ -267,6 +280,8 @@ class WiFi : Service() {
                     Manifest.permission.BLUETOOTH_SCAN
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
+
+            }else{
                 // Start discovery
                 bluetoothAdapter.startDiscovery()
 
