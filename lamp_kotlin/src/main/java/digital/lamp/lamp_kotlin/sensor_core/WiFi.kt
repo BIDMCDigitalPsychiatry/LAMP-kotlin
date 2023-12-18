@@ -13,9 +13,12 @@ import android.content.pm.PackageManager
 import android.net.wifi.ScanResult
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import digital.lamp.lamp_kotlin.sensor_core.utils.LampConstants
 import java.util.concurrent.Callable
 import java.util.concurrent.Executors
@@ -189,6 +192,7 @@ class WiFi : Service() {
             if (bluetoothAdapter != null && bluetoothAdapter.isEnabled) {
                 when (intent?.action) {
                     BluetoothDevice.ACTION_FOUND -> {
+
                         val device =
                             intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                         device?.let {
@@ -210,6 +214,12 @@ class WiFi : Service() {
     class BluetoothBackgroundService : IntentService(TAG) {
         private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
 
+        override fun onCreate() {
+            super.onCreate()
+            val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+            registerReceiver(bluetoothReceiver, filter)
+        }
+
         private val bluetoothReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
                 val action = intent?.action
@@ -226,6 +236,7 @@ class WiFi : Service() {
                             val device =
                                 intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                             device?.let {
+
                                 val rowData = ContentValues()
                                 rowData.put(TIMESTAMP, System.currentTimeMillis())
                                 rowData.put(BLUETOOTH_ADDRESS, device.address)
@@ -234,7 +245,6 @@ class WiFi : Service() {
                                 )
                             }
                         }
-
                     }
                 }
             }
@@ -246,27 +256,31 @@ class WiFi : Service() {
                 return
             }
 
+            // Register for broadcasts when a device is discovered
+
             if (ActivityCompat.checkSelfPermission(
                     this,
                     Manifest.permission.BLUETOOTH_SCAN
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // Request Bluetooth permissions
-                // Handle the permission request in onRequestPermissionsResult
-            } else {
-                // Start Bluetooth discovery
-                val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-                registerReceiver(bluetoothReceiver, filter)
-                bluetoothAdapter.startDiscovery()
-                Thread.sleep(12000)
-                // Stop Bluetooth discovery
-                bluetoothAdapter.cancelDiscovery()
 
-                // Unregister the BroadcastReceiver
-                unregisterReceiver(bluetoothReceiver)
+            }else{
+                // Start discovery
+                bluetoothAdapter.startDiscovery()
+
+                // The discovery will continue for 12 seconds (adjust as needed)
+                Thread.sleep(12000)
+
+                // Stop discovery
+                bluetoothAdapter.cancelDiscovery()
             }
+
         }
 
+        override fun onDestroy() {
+            super.onDestroy()
+            unregisterReceiver(bluetoothReceiver)
+        }
     }
 
     /**
@@ -420,7 +434,6 @@ class WiFi : Service() {
         fun setInterval(frequency: Long) {
             this.frequency = frequency
         }
-
     }
 
 }
