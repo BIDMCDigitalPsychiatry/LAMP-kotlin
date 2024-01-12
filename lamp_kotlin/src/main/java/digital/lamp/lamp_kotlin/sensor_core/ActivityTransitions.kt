@@ -105,7 +105,7 @@ class ActivityTransitions : Service(), SensorEventListener {
         Log.e(Companion.TAG, "Started Activity Transitions")
 
         //Register the BroadcastReceiver to listen for activity transitions.
-        registerReceiver(mTransitionsReceiver, IntentFilter(actions))
+        registerReceiver(mTransitionsReceiver, IntentFilter(actions), RECEIVER_EXPORTED)
         enableActivityTransitions()
         return START_REDELIVER_INTENT
     }
