@@ -125,7 +125,7 @@ data class NutritionData(
         @field:[SerializeNulls] var source: Any?,
 )
 @JsonClass(generateAdapter = true)
-data class GoogleFitData(
+data class GoogleHealthConnectData(
         val unit: String?,
         val value: Any?,
         @field:[SerializeNulls] var source: Any?,
