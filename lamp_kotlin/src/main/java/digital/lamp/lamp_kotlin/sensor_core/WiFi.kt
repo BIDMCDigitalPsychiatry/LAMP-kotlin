@@ -35,7 +35,7 @@ class WiFi : Service() {
         wifiManager = this.applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
         val filter = IntentFilter()
         filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        registerReceiver(wifiMonitor, filter)
+        registerReceiver(wifiMonitor, filter, RECEIVER_EXPORTED)
         backgroundService = Intent(this, BackgroundService::class.java)
         backgroundService!!.action = ACTION_LAMP_WIFI_REQUEST_SCAN
         wifiScan = PendingIntent.getService(
@@ -46,7 +46,7 @@ class WiFi : Service() {
         )
 
         val bluetoothFilter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        registerReceiver(bluetoothMonitor, bluetoothFilter)
+        registerReceiver(bluetoothMonitor, bluetoothFilter, RECEIVER_EXPORTED)
         bluetoothBackgroundService = Intent(this, BluetoothBackgroundService::class.java)
         bluetoothBackgroundService!!.action = ACTION_LAMP_BLUETOOTH_REQUEST_SCAN
         bluetoothScan = PendingIntent.getService(
@@ -189,7 +189,7 @@ class WiFi : Service() {
         override fun onCreate() {
             super.onCreate()
             val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-            registerReceiver(bluetoothReceiver, filter)
+            registerReceiver(bluetoothReceiver, filter, RECEIVER_EXPORTED)
         }
 
         private val bluetoothReceiver = object : BroadcastReceiver() {
