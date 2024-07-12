@@ -95,7 +95,7 @@ class TelephonySensor : Service() {
             phoneCallReceiver = PhonecallReceiver()
             val filter = IntentFilter()
             filter.addAction("android.intent.action.PHONE_STATE")
-            registerReceiver(phoneCallReceiver, filter)
+            registerReceiver(phoneCallReceiver, filter, RECEIVER_EXPORTED)
         }
         if (Lamp.DEBUG) Log.d(TAG, "Telephony service active...")
         return START_REDELIVER_INTENT
