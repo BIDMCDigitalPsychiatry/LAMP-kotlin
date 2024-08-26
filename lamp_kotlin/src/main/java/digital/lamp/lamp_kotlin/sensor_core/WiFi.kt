@@ -35,7 +35,7 @@ class WiFi : Service() {
         wifiManager = this.applicationContext.getSystemService(WIFI_SERVICE) as WifiManager
         val filter = IntentFilter()
         filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-        registerReceiver(wifiMonitor, filter)
+        registerReceiver(wifiMonitor, filter, RECEIVER_EXPORTED)
         backgroundService = Intent(this, BackgroundService::class.java)
         backgroundService!!.action = ACTION_LAMP_WIFI_REQUEST_SCAN
         wifiScan = PendingIntent.getService(
@@ -46,7 +46,7 @@ class WiFi : Service() {
         )
 
         val bluetoothFilter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-        registerReceiver(bluetoothMonitor, bluetoothFilter)
+        registerReceiver(bluetoothMonitor, bluetoothFilter, RECEIVER_EXPORTED)
         bluetoothBackgroundService = Intent(this, BluetoothBackgroundService::class.java)
         bluetoothBackgroundService!!.action = ACTION_LAMP_BLUETOOTH_REQUEST_SCAN
         bluetoothScan = PendingIntent.getService(
@@ -78,30 +78,39 @@ class WiFi : Service() {
 
             if (frequency != null) {
                 if (frequency!! >= LampConstants.FREQUENCY_WIFI) {
-                    alarmManager?.cancel(wifiScan)
-                    alarmManager?.setRepeating(
-                        AlarmManager.RTC_WAKEUP,
-                        System.currentTimeMillis(),
-                        frequency!! * 1000,
-                        wifiScan
-                    )
+                    wifiScan?.let {
+                        alarmManager?.cancel(it)
+                        alarmManager?.setRepeating(
+                            AlarmManager.RTC_WAKEUP,
+                            System.currentTimeMillis(),
+                            frequency!! * 1000,
+                            it
+                        )
+                    }
+
                 }else{
-                    alarmManager?.cancel(wifiScan)
+                    wifiScan?.let {
+                        alarmManager?.cancel(it)
+                        alarmManager?.setRepeating(
+                            AlarmManager.RTC_WAKEUP,
+                            System.currentTimeMillis(),
+                            (LampConstants.FREQUENCY_WIFI * 1000).toLong(),
+                            it
+                        )
+                    }
+
+                }
+            } else {
+                wifiScan?.let {
+                    alarmManager?.cancel(it)
                     alarmManager?.setRepeating(
                         AlarmManager.RTC_WAKEUP,
                         System.currentTimeMillis(),
                         (LampConstants.FREQUENCY_WIFI * 1000).toLong(),
-                        wifiScan
+                        it
                     )
                 }
-            } else {
-                alarmManager?.cancel(wifiScan)
-                alarmManager?.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    System.currentTimeMillis(),
-                    (LampConstants.FREQUENCY_WIFI * 1000).toLong(),
-                    wifiScan
-                )
+
 
             }
 
@@ -118,31 +127,38 @@ class WiFi : Service() {
         val startTime = System.currentTimeMillis()
         if (frequency != null) {
             if (frequency!! >= LampConstants.FREQUENCY_WIFI) {
-                bluetoothAlarmManager?.cancel(bluetoothScan)
-                bluetoothAlarmManager?.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    startTime,
-                    frequency!! * 1000,
-                    bluetoothScan
-                )
+                bluetoothScan?.let { bluetoothScan->
+                    bluetoothAlarmManager?.cancel(bluetoothScan)
+                    bluetoothAlarmManager?.setRepeating(
+                        AlarmManager.RTC_WAKEUP,
+                        startTime,
+                        frequency!! * 1000,
+                        bluetoothScan
+                    )
+                }
+
             }else {
-                bluetoothAlarmManager?.cancel(bluetoothScan)
+                bluetoothScan?.let { bluetoothScan->
+                    bluetoothAlarmManager?.cancel(bluetoothScan)
+                    bluetoothAlarmManager?.setRepeating(
+                        AlarmManager.RTC_WAKEUP,
+                        startTime,
+                        (LampConstants.FREQUENCY_WIFI * 1000).toLong(),
+                        bluetoothScan
+                    )
+                }
+            }
+
+        } else {
+            bluetoothScan?.let {
+                bluetoothAlarmManager?.cancel(it)
                 bluetoothAlarmManager?.setRepeating(
                     AlarmManager.RTC_WAKEUP,
                     startTime,
                     (LampConstants.FREQUENCY_WIFI * 1000).toLong(),
-                    bluetoothScan
+                    it
                 )
             }
-
-        } else {
-            bluetoothAlarmManager?.cancel(bluetoothScan)
-            bluetoothAlarmManager?.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                startTime,
-                (LampConstants.FREQUENCY_WIFI * 1000).toLong(),
-                bluetoothScan
-            )
         }
 
 
@@ -152,8 +168,8 @@ class WiFi : Service() {
         super.onDestroy()
         unregisterReceiver(wifiMonitor)
         unregisterReceiver(bluetoothMonitor)
-        if (wifiScan != null) alarmManager!!.cancel(wifiScan)
-        if (bluetoothScan != null) bluetoothAlarmManager!!.cancel(bluetoothScan)
+        if (wifiScan != null) alarmManager!!.cancel(wifiScan!!)
+        if (bluetoothScan != null) bluetoothAlarmManager!!.cancel(bluetoothScan!!)
         if (Lamp.DEBUG) Log.d(TAG, "WiFi service terminated...")
     }
 
@@ -189,7 +205,7 @@ class WiFi : Service() {
         override fun onCreate() {
             super.onCreate()
             val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-            registerReceiver(bluetoothReceiver, filter)
+            registerReceiver(bluetoothReceiver, filter, RECEIVER_EXPORTED)
         }
 
         private val bluetoothReceiver = object : BroadcastReceiver() {
