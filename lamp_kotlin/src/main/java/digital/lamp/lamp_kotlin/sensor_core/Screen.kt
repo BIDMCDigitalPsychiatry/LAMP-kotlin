@@ -83,7 +83,7 @@ class Screen : Service() {
             filter.addAction(Intent.ACTION_SCREEN_OFF)
             filter.addAction(Intent.ACTION_USER_PRESENT)
             filter.addAction(ACTION_LAMP_SCREEN_BOOT)
-            registerReceiver(screenMonitor, filter)
+            registerReceiver(screenMonitor, filter, RECEIVER_EXPORTED)
             val pm = getSystemService(POWER_SERVICE) as PowerManager
             val km = getSystemService(KEYGUARD_SERVICE) as KeyguardManager
             if (pm.isInteractive) {

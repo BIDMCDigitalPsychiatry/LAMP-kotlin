@@ -35,7 +35,7 @@ class Lamp : Service() {
         val foreground = IntentFilter()
         foreground.addAction(ACTION_LAMP_PRIORITY_FOREGROUND)
         foreground.addAction(ACTION_LAMP_PRIORITY_BACKGROUND)
-        registerReceiver(foregroundMgr, foreground)
+        registerReceiver(foregroundMgr, foreground, RECEIVER_EXPORTED)
         if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
             stopSelf()
             return
