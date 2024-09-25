@@ -23,60 +23,81 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"/>
     <application
         android:usesCleartextTraffic="true">
 
         <!-- Sensor services -->
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.Lamp"
+            android:foregroundServiceType="dataSync"
             android:exported="true" />
 
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.Locations"
+            android:foregroundServiceType="location"
             android:exported="true" />
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.Screen"
+            android:foregroundServiceType="shortService"
             android:exported="true" />
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.Accelerometer"
+            android:foregroundServiceType="shortService"
             android:exported="true" />
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.ActivityTransitions"
+            android:foregroundServiceType="shortService"
             android:exported="true" />
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.Gyroscope"
+            android:foregroundServiceType="shortService"
             android:exported="true" />
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.WiFi"
+            android:foregroundServiceType="connectedDevice"
             android:exported="true" />
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.WiFi$BackgroundService"
+            android:foregroundServiceType="connectedDevice"
             android:exported="true" />
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.WiFi$BluetoothBackgroundService"
+            android:foregroundServiceType="connectedDevice"
             android:exported="true" />
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.Rotation"
+            android:foregroundServiceType="shortService"
             android:exported="true" />
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.Light"
+            android:foregroundServiceType="shortService"
             android:exported="true" />
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.Magnetometer"
+            android:foregroundServiceType="shortService"
             android:exported="true" />
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.Barometer"
+            android:foregroundServiceType="shortService"
             android:exported="true" />
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.LinearAccelerometer"
+            android:foregroundServiceType="shortService"
             android:exported="true" />
 
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.Gravity"
+            android:foregroundServiceType="shortService"
             android:exported="true" />
 
         <service
             android:name="digital.lamp.lamp_kotlin.sensor_core.TelephonySensor"
+            android:foregroundServiceType="shortService"
             android:exported="true" />
 
     </application>
