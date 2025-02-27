@@ -35,7 +35,7 @@ class ActivityEventAPI(basePath: kotlin.String = defaultBasePath) : ApiClient(ba
 
     /**
      * Get all activity events for a participant.
-     * Get the set of all activity events produced by a given participant,  by identifier.
+     * Get the set of all activity events produced by a given participant,  by identifier. ignore_binary is set as true so that video recording's binary data will not be retreived
      * @param participantId
      * @param origin  (optional)
      * @param from  (optional)
@@ -66,6 +66,8 @@ class ActivityEventAPI(basePath: kotlin.String = defaultBasePath) : ApiClient(ba
                         if (transform != null) {
                             put("transform", listOf(transform.toString()))
                         }
+                        val ignoreBinary=true
+                        put("ignore_binary", listOf(ignoreBinary.toString()))
                     }
             val localVariableHeaders: MutableMap<String, String> = mutableMapOf()
             localVariableHeaders.apply {
