@@ -8,6 +8,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     buildToolsVersion "30.0.2"
+    namespace "digital.lamp.lamp_kotlin"
 
     defaultConfig {
         compileSdk 34
