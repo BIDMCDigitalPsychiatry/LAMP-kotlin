@@ -36,7 +36,9 @@ data class DurationIntervalLegacy (
     @Json(name = "customTimes")
     var custom_time: @RawValue ArrayList<Any>? = null,
     @Json(name = "notificationIds")
-    var notification_ids: @RawValue ArrayList<Any>? = null
+    var notification_ids: @RawValue ArrayList<Any>? = null,
+    @Json(name = "notificationMessage")
+    var notificationMessage : @RawValue Any? = null
 ) : Serializable, Parcelable {
 	companion object {
 		private const val serialVersionUID: Long = 123
